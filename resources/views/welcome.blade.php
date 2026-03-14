@@ -123,25 +123,68 @@
 
             .features-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
                 gap: 2rem;
+                margin-top: 2rem;
             }
 
             .feature-card {
-                background: white;
-                padding: 2rem;
-                border-radius: 0.5rem;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+                padding: 2.5rem 2rem;
+                border-radius: 1rem;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 25px rgba(0, 0, 0, 0.1);
+                border: 1px solid rgba(0, 0, 0, 0.05);
+                transition: all 0.3s ease;
+                text-align: center;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .feature-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: linear-gradient(90deg, #2563eb 0%, #1e3a8a 100%);
+                transform: scaleX(0);
+                transition: transform 0.3s ease;
+            }
+
+            .feature-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15), 0 20px 40px rgba(0, 0, 0, 0.2);
+            }
+
+            .feature-card:hover::before {
+                transform: scaleX(1);
+            }
+
+            .feature-icon {
+                width: 4rem;
+                height: 4rem;
+                margin: 0 auto 1.5rem;
+                background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 1.5rem;
+                box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
             }
 
             .feature-card h3 {
-                font-size: 1.25rem;
+                font-size: 1.5rem;
                 font-weight: bold;
                 margin-bottom: 1rem;
+                color: #1e293b;
             }
 
             .feature-card p {
-                color: #4b5563;
+                color: #64748b;
+                line-height: 1.6;
             }
         </style>
     </x-slot:styles>
@@ -207,15 +250,17 @@
             <h2>Fitur Utama</h2>
             <div class="features-grid">
                 <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
                     <h3>Monitoring Realtime</h3>
                     <p>Pantau perubahan suhu dan kondisi iklim Arktik secara real-time dengan data akurat dan terkini.
                     </p>
                 </div>
                 <div class="feature-card">
-                    <h3>Live Cams</h3>
-                    <p>Saksikan kehidupan liar Arktik melalui kamera langsung yang menangkap momen-momen alami.</p>
-                </div>
-                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
                     <h3>Encyclopedia</h3>
                     <p>Pelajari tentang berbagai spesies yang hidup di Arktik dan upaya konservasi untuk melindungi
                         mereka.</p>
