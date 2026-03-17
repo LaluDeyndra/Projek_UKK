@@ -1,18 +1,6 @@
 <x-guest-layout>
     <x-slot:styles>
         <style>
-            /* CSS spesifik halaman ini */
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-
-            body {
-                font-family: 'Inter', sans-serif;
-                line-height: 1.6;
-            }
-
             .hero {
                 padding-top: 80px;
                 position: relative;
@@ -52,7 +40,7 @@
 
             .hero p {
                 font-size: 1.5rem;
-                color: #f3f4f6;
+                color: rgba(255, 255, 255, 0.92);
                 margin-bottom: 2rem;
                 max-width: 32rem;
                 margin-left: auto;
@@ -73,40 +61,16 @@
                 }
             }
 
-            .btn {
-                padding: 0.75rem 1.5rem;
-                border-radius: 0.5rem;
-                font-weight: 500;
-                text-decoration: none;
-                transition: all 0.3s ease;
-                cursor: pointer;
-                border: none;
-                display: inline-block;
-                position: relative;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.1);
-                transform: translateY(0);
-            }
-
-            .btn:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), 0 8px 25px rgba(0, 0, 0, 0.15);
-            }
-
-            .btn-dark {
-                background: linear-gradient(145deg, #111827, #1a202c);
-                color: white;
-            }
-
             .section {
                 padding: 2rem 1.5rem;
             }
 
             .section-light {
-                background: #f9fafb;
+                background: var(--av-surface-2);
             }
 
             .section-white {
-                background: white;
+                background: var(--av-surface);
             }
 
             .section-container {
@@ -119,6 +83,7 @@
                 font-weight: bold;
                 text-align: center;
                 margin-bottom: 3rem;
+                color: var(--av-text);
             }
 
             .features-grid {
@@ -129,11 +94,11 @@
             }
 
             .feature-card {
-                background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+                background: var(--av-surface);
                 padding: 2.5rem 2rem;
                 border-radius: 1rem;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 25px rgba(0, 0, 0, 0.1);
-                border: 1px solid rgba(0, 0, 0, 0.05);
+                box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+                border: 1px solid var(--av-border);
                 transition: all 0.3s ease;
                 text-align: center;
                 position: relative;
@@ -147,14 +112,14 @@
                 left: 0;
                 right: 0;
                 height: 4px;
-                background: linear-gradient(90deg, #2563eb 0%, #1e3a8a 100%);
+                background: linear-gradient(90deg, var(--av-primary) 0%, var(--av-primary-2) 100%);
                 transform: scaleX(0);
                 transition: transform 0.3s ease;
             }
 
             .feature-card:hover {
                 transform: translateY(-8px);
-                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15), 0 20px 40px rgba(0, 0, 0, 0.2);
+                box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
             }
 
             .feature-card:hover::before {
@@ -165,36 +130,56 @@
                 width: 4rem;
                 height: 4rem;
                 margin: 0 auto 1.5rem;
-                background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
+                background: linear-gradient(135deg, var(--av-primary) 0%, var(--av-primary-2) 100%);
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 color: white;
                 font-size: 1.5rem;
-                box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+                box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
             }
 
             .feature-card h3 {
                 font-size: 1.5rem;
                 font-weight: bold;
                 margin-bottom: 1rem;
-                color: #1e293b;
+                color: var(--av-text);
             }
 
             .feature-card p {
-                color: #64748b;
+                color: var(--av-muted);
                 line-height: 1.6;
+            }
+
+            .av-kicker {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 0.35rem 0.75rem;
+                border-radius: 9999px;
+                border: 1px solid rgba(255, 255, 255, 0.22);
+                background: rgba(255, 255, 255, 0.08);
+                color: rgba(255, 255, 255, 0.92);
+                font-size: 0.75rem;
+                font-weight: 600;
+                letter-spacing: 0.02em;
+                margin: 0 auto 1rem;
+                width: fit-content;
             }
         </style>
     </x-slot:styles>
 
     <section class="hero">
         <div class="hero-content">
+            <div class="av-kicker">
+                <i class="fas fa-snowflake"></i>
+                Arctic Vision • Realtime Monitoring
+            </div>
             <h1>Arctic Vision</h1>
             <p>Membangun masa depan untuk ekosistem Arktik melalui pemantauan cerdas dan konservasi berkelanjutan</p>
             <div class="hero-buttons">
-                <a href="#monitoring">
+                <a href="{{ route('monitoring') }}">
                     <button
                         class="relative group border-none bg-transparent p-0 outline-none cursor-pointer font-mono font-light uppercase text-base">
                         <span
@@ -207,7 +192,7 @@
                         <div
                             class="relative flex items-center justify-between py-3 px-6 text-lg text-white rounded-lg transform -translate-y-1 bg-gradient-to-r from-zinc-800 via-zinc-900 to-black gap-3 transition duration-[600ms] ease-[cubic-bezier(0.3,0.7,0.4,1)] group-hover:-translate-y-1.5 group-hover:duration-[250ms] group-active:-translate-y-0.5 brightness-100 group-hover:brightness-125">
 
-                            <span class="select-none font-bold">Monitoring</span>
+                            <span class="select-none font-bold">Monitoring Suhu</span>
 
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 class="w-5 h-5 ml-2 -mr-1 transition duration-250 group-hover:scale-110">
@@ -265,6 +250,13 @@
                     <p>Pelajari tentang berbagai spesies yang hidup di Arktik dan upaya konservasi untuk melindungi
                         mereka.</p>
                 </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-halved"></i>
+                    </div>
+                    <h3>Privasi & Keamanan</h3>
+                    <p>Data kamu diproses dengan prinsip minim data dan akses yang jelas, sehingga tetap aman dan nyaman.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -272,9 +264,9 @@
     <section id="encyclopedia" class="section section-white">
         <div class="section-container">
             <h2>Encyclopedia - Penghuni Arktik</h2>
-            <p style="text-align: center; color: #4b5563; max-width: 32rem; margin: 0 auto;">
+            <p style="text-align: center; color: var(--av-muted); max-width: 32rem; margin: 0 auto;">
                 Jelajahi dunia fauna Arktik dan pelajari bagaimana mereka beradaptasi dengan lingkungan yang ekstrem.
             </p>
         </div>
     </section>
-    </x-layout>
+</x-guest-layout>

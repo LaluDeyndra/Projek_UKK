@@ -1,5 +1,3 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 <style>
     .navbar {
         position: fixed;
@@ -7,10 +5,10 @@
         left: 0;
         right: 0;
         z-index: 50;
-        background: rgba(255, 255, 255, 0.75);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        background: color-mix(in srgb, var(--av-bg) 82%, transparent);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--av-border);
     }
 
     .navbar-container {
@@ -28,7 +26,7 @@
         gap: 1rem;
         font-size: 1.25rem;
         font-weight: bold;
-        color: #1e3a8a;
+        color: var(--av-primary-2);
         cursor: pointer;
         transition: opacity 0.3s;
         text-decoration: none;
@@ -45,7 +43,7 @@
         justify-content: center;
         width: 2rem;
         height: 2rem;
-        background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
+        background: linear-gradient(135deg, var(--av-primary) 0%, var(--av-primary-2) 100%);
         border-radius: 0.5rem;
         color: white;
     }
@@ -70,7 +68,7 @@
         border: none;
         border-radius: 0.5rem;
         background: rgba(0, 0, 0, 0.06);
-        color: #1f2937;
+        color: var(--av-text);
         cursor: pointer;
         transition: background 0.2s;
     }
@@ -101,7 +99,7 @@
         height: 100%;
         width: 280px;
         max-width: 90%;
-        background: white;
+        background: var(--av-surface);
         padding: 2rem 1.5rem;
         box-shadow: 8px 0 24px rgba(0, 0, 0, 0.2);
         transform: translateX(-100%);
@@ -133,7 +131,7 @@
         align-items: center;
         gap: 0.75rem;
         padding: 0.75rem 0;
-        color: #374151;
+        color: var(--av-text);
         text-decoration: none;
         font-weight: 600;
         transition: color 0.2s, background 0.2s;
@@ -143,8 +141,8 @@
     }
 
     .sidebar a:hover {
-        color: #2563eb;
-        background: rgba(37, 99, 235, 0.1);
+        color: var(--av-primary);
+        background: color-mix(in srgb, var(--av-primary) 12%, transparent);
     }
 
     .sidebar a i {
@@ -175,13 +173,13 @@
 
     .navbar-menu a {
         text-decoration: none;
-        color: #374151;
+        color: var(--av-text);
         font-weight: 500;
         transition: color 0.3s;
     }
 
     .navbar-menu a:hover {
-        color: #2563eb;
+        color: var(--av-primary);
     }
 
     .navbar-auth {
@@ -192,7 +190,7 @@
 
     .btn-dashboard {
         padding: 0.5rem 1rem;
-        background: #2563eb;
+        background: var(--av-primary);
         color: white;
         border-radius: 0.375rem;
         text-decoration: none;
@@ -201,7 +199,32 @@
     }
 
     .btn-dashboard:hover {
-        background: #1d4ed8;
+        background: var(--av-primary-2);
+    }
+
+    .theme-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        height: 2.5rem;
+        padding: 0 0.85rem;
+        border-radius: 0.75rem;
+        border: 1px solid var(--av-border);
+        background: rgba(0, 0, 0, 0.04);
+        color: var(--av-text);
+        cursor: pointer;
+        transition: transform 0.15s ease, background 0.2s ease;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .theme-toggle:hover {
+        background: color-mix(in srgb, var(--av-primary) 10%, rgba(0, 0, 0, 0.03));
+    }
+
+    .theme-toggle:active {
+        transform: scale(0.98);
     }
 
     /* Modal Styles */
@@ -341,15 +364,19 @@
         </button>
 
         <div class="navbar-menu">
-            <a href="#Beranda">Beranda</a>
-            <a href="#monitoring">Monitoring</a>
+            <a href="{{ route('welcome') }}">Beranda</a>
+            <a href="{{ route('monitoring') }}">Monitoring</a>
             <a href="#encyclopedia">Encyclopedia</a>
             <a href="#about">About</a>
+            <button type="button" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle tema">
+                <i id="themeIcon" class="fas fa-moon"></i>
+                <span id="themeText" style="font-size: 0.9rem;">Dark</span>
+            </button>
         </div>
 
         @auth
             <div class="navbar-auth">
-                <span style="color: #374151;">{{ Auth::user()->name }}</span>
+                <span style="color: var(--av-text);">{{ Auth::user()->name }}</span>
                 <a href="{{ url('/dashboard') }}" class="btn-dashboard">Dashboard</a>
             </div>
         @endauth
@@ -364,17 +391,22 @@
             <div class="navbar-icon" style="margin: 0 auto 0.5rem;">
                 <i class="fas fa-snowflake"></i>
             </div>
-            <div style="font-weight: bold; color: #1e3a8a;">Arctic Vision</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Menu Navigasi</div>
+            <div style="font-weight: bold; color: var(--av-primary-2);">Arctic Vision</div>
+            <div style="font-size: 0.875rem; color: var(--av-muted);">Menu Navigasi</div>
         </div>
-        <a href="#Beranda" onclick="closeMobileNav(event)">
+        <a href="{{ route('welcome') }}" onclick="closeMobileNav(event)">
             <i class="fas fa-home"></i>
             <span>Beranda</span>
         </a>
-        <a href="#monitoring" onclick="closeMobileNav(event)">
+        <a href="{{ route('monitoring') }}" onclick="closeMobileNav(event)">
             <i class="fas fa-chart-line"></i>
             <span>Monitoring</span>
         </a>
+        <button type="button" class="theme-toggle" style="width: 100%; margin-top: 1rem;" onclick="toggleTheme()"
+            aria-label="Toggle tema">
+            <i id="themeIconMobile" class="fas fa-moon"></i>
+            <span id="themeTextMobile" style="font-size: 0.95rem;">Dark</span>
+        </button>
         <a href="#encyclopedia" onclick="closeMobileNav(event)">
             <i class="fas fa-book"></i>
             <span>Encyclopedia</span>
@@ -386,7 +418,7 @@
 
         @auth
             <div class="sidebar-divider"></div>
-            <div style="padding: 0.75rem 0; color: #374151; font-weight: 600;">
+            <div style="padding: 0.75rem 0; color: var(--av-text); font-weight: 600;">
                 <i class="fas fa-user" style="margin-right: 0.5rem;"></i>
                 {{ Auth::user()->name }}
             </div>
@@ -401,8 +433,31 @@
 </div>
 
 <script>
+    function applyThemeUI() {
+        const isDark = document.documentElement.classList.contains('theme-dark');
+        const iconClass = isDark ? 'fas fa-sun' : 'fas fa-moon';
+        const text = isDark ? 'Light' : 'Dark';
+
+        const icon = document.getElementById('themeIcon');
+        const label = document.getElementById('themeText');
+        if (icon) icon.className = iconClass;
+        if (label) label.textContent = text;
+
+        const iconM = document.getElementById('themeIconMobile');
+        const labelM = document.getElementById('themeTextMobile');
+        if (iconM) iconM.className = iconClass;
+        if (labelM) labelM.textContent = text;
+    }
+
+    function toggleTheme() {
+        const isDark = document.documentElement.classList.toggle('theme-dark');
+        try {
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        } catch (e) {}
+        applyThemeUI();
+    }
+
     function openMobileNav() {
-        console.log('Opening mobile nav');
         const overlay = document.getElementById('mobileNav');
         const sidebar = overlay.querySelector('.sidebar');
         overlay.style.display = 'block';
@@ -414,7 +469,6 @@
     }
 
     function closeMobileNav(event) {
-        console.log('Closing mobile nav');
         const overlay = document.getElementById('mobileNav');
         const sidebar = overlay.querySelector('.sidebar');
 
@@ -438,4 +492,6 @@
             modal.classList.remove('show');
         }
     }
+
+    applyThemeUI();
 </script>
