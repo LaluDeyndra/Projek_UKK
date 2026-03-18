@@ -15,6 +15,10 @@ Route::get('/terms-of-service', function () {
     return view('terms-of-service');
 })->name('terms-of-service');
 
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
 Route::get('/monitoring', function () {
     return view('monitoring');
 })->name('monitoring');

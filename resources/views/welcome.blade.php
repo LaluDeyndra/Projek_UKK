@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-public-layout>
     <x-slot:styles>
         <style>
             .hero {
@@ -177,7 +177,10 @@
                 Arctic Vision • Realtime Monitoring
             </div>
             <h1>Arctic Vision</h1>
-            <p>Membangun masa depan untuk ekosistem Arktik melalui pemantauan cerdas dan konservasi berkelanjutan</p>
+            <p>
+                <span class="lang-id">Membangun masa depan untuk ekosistem Arktik melalui pemantauan cerdas dan konservasi berkelanjutan</span>
+                <span class="lang-en">Building the future for Arctic ecosystems through intelligent monitoring and sustainable conservation</span>
+            </p>
             <div class="hero-buttons">
                 <a href="{{ route('monitoring') }}">
                     <button
@@ -192,7 +195,10 @@
                         <div
                             class="relative flex items-center justify-between py-3 px-6 text-lg text-white rounded-lg transform -translate-y-1 bg-gradient-to-r from-zinc-800 via-zinc-900 to-black gap-3 transition duration-[600ms] ease-[cubic-bezier(0.3,0.7,0.4,1)] group-hover:-translate-y-1.5 group-hover:duration-[250ms] group-active:-translate-y-0.5 brightness-100 group-hover:brightness-125">
 
-                            <span class="select-none font-bold">Monitoring Suhu</span>
+                            <span class="select-none font-bold">
+                                <span class="lang-id">Monitoring Suhu</span>
+                                <span class="lang-en">Temperature Monitoring</span>
+                            </span>
 
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 class="w-5 h-5 ml-2 -mr-1 transition duration-250 group-hover:scale-110">
@@ -215,7 +221,10 @@
                         <div
                             class="relative flex items-center justify-between py-3 px-6 text-lg text-white rounded-lg transform -translate-y-1 bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700 gap-3 transition duration-[600ms] ease-[cubic-bezier(0.3,0.7,0.4,1)] group-hover:-translate-y-1.5 group-hover:duration-[250ms] group-active:-translate-y-0.5 brightness-100 group-hover:brightness-110">
 
-                            <span class="select-none font-bold">Pelajari Hewan</span>
+                            <span class="select-none font-bold">
+                                <span class="lang-id">Pelajari Hewan</span>
+                                <span class="lang-en">Learn Animals</span>
+                            </span>
 
                             <svg viewBox="0 0 20 20" fill="currentColor"
                                 class="w-5 h-5 ml-2 -mr-1 transition duration-250 group-hover:translate-x-1">
@@ -232,14 +241,22 @@
 
     <section id="monitoring" class="section section-light">
         <div class="section-container">
-            <h2>Fitur Utama</h2>
+            <h2>
+                <span class="lang-id">Fitur Utama</span>
+                <span class="lang-en">Key Features</span>
+            </h2>
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-chart-line"></i>
                     </div>
-                    <h3>Monitoring Realtime</h3>
-                    <p>Pantau perubahan suhu dan kondisi iklim Arktik secara real-time dengan data akurat dan terkini.
+                    <h3>
+                        <span class="lang-id">Monitoring Realtime</span>
+                        <span class="lang-en">Realtime Monitoring</span>
+                    </h3>
+                    <p>
+                        <span class="lang-id">Pantau perubahan suhu dan kondisi iklim Arktik secara real-time dengan data akurat dan terkini.</span>
+                        <span class="lang-en">Monitor temperature changes and Arctic climate conditions in real-time with accurate and up-to-date data.</span>
                     </p>
                 </div>
                 <div class="feature-card">
@@ -247,15 +264,23 @@
                         <i class="fas fa-book-open"></i>
                     </div>
                     <h3>Encyclopedia</h3>
-                    <p>Pelajari tentang berbagai spesies yang hidup di Arktik dan upaya konservasi untuk melindungi
-                        mereka.</p>
+                    <p>
+                        <span class="lang-id">Pelajari tentang berbagai spesies yang hidup di Arktik dan upaya konservasi untuk melindungi mereka.</span>
+                        <span class="lang-en">Learn about various species living in the Arctic and conservation efforts to protect them.</span>
+                    </p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-shield-halved"></i>
                     </div>
-                    <h3>Privasi & Keamanan</h3>
-                    <p>Data kamu diproses dengan prinsip minim data dan akses yang jelas, sehingga tetap aman dan nyaman.</p>
+                    <h3>
+                        <span class="lang-id">Privasi & Keamanan</span>
+                        <span class="lang-en">Privacy & Security</span>
+                    </h3>
+                    <p>
+                        <span class="lang-id">Data kamu diproses dengan prinsip minim data dan akses yang jelas, sehingga tetap aman dan nyaman.</span>
+                        <span class="lang-en">Your data is processed with a data minimization principle and clear access constraints, keeping it safe and secure.</span>
+                    </p>
                 </div>
             </div>
         </div>
@@ -263,10 +288,14 @@
 
     <section id="encyclopedia" class="section section-white">
         <div class="section-container">
-            <h2>Encyclopedia - Penghuni Arktik</h2>
+            <h2>
+                <span class="lang-id">Encyclopedia - Penghuni Arktik</span>
+                <span class="lang-en">Encyclopedia - Arctic Inhabitants</span>
+            </h2>
             <p style="text-align: center; color: var(--av-muted); max-width: 32rem; margin: 0 auto;">
-                Jelajahi dunia fauna Arktik dan pelajari bagaimana mereka beradaptasi dengan lingkungan yang ekstrem.
+                <span class="lang-id">Jelajahi dunia fauna Arktik dan pelajari bagaimana mereka beradaptasi dengan lingkungan yang ekstrem.</span>
+                <span class="lang-en">Explore the world of Arctic fauna and learn how they adapt to extreme environments.</span>
             </p>
         </div>
     </section>
-</x-guest-layout>
+</x-public-layout>

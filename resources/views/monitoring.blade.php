@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-public-layout>
     <x-slot:title>Monitoring - Arctic Vision</x-slot:title>
 
     <x-slot:styles>
@@ -82,6 +82,18 @@
             .av-muted {
                 color: var(--av-muted);
             }
+
+            .theme-dark .av-card {
+                background: linear-gradient(-45deg, #0b1220, #000000, #0f172a, #0b1220);
+                background-size: 400% 400%;
+                animation: avCardGradient 15s ease infinite;
+            }
+
+            @keyframes avCardGradient {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
         </style>
     </x-slot:styles>
 
@@ -99,16 +111,21 @@
                                     Monitoring Realtime • Arctic Vision
                                 </div>
                                 <h1 class="mt-4 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-                                    Pantau suhu & kelembaban secara realtime
+                                    <span class="lang-id">Pantau suhu & kelembaban secara realtime</span>
+                                    <span class="lang-en">Monitor temperature & humidity in real-time</span>
                                 </h1>
                                 <p class="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">
-                                    Angka dan grafik akan langsung terisi otomatis tanpa perlu reload.
+                                    <span class="lang-id">Angka dan grafik akan langsung terisi otomatis setiap 30 menit tanpa perlu reload.</span>
+                                    <span class="lang-en">Numbers and charts will automatically populate every 30 minutes without needing to reload.</span>
                                 </p>
                             </div>
 
                             <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
                                 <div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                                    <div class="text-xs text-slate-600">Terakhir update</div>
+                                    <div class="text-xs text-slate-600">
+                                        <span class="lang-id">Terakhir update</span>
+                                        <span class="lang-en">Last updated</span>
+                                    </div>
                                     <div class="mt-1 text-sm font-semibold text-slate-900" id="last-updated">--</div>
                                 </div>
                                 <button id="btn-refresh"
@@ -124,8 +141,10 @@
                             <div class="av-card p-6 transition hover:shadow-md">
                                 <div class="flex items-start justify-between">
                                     <div>
-                                        <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">Suhu
-                                            Udara</div>
+                                        <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                                            <span class="lang-id">Suhu Udara</span>
+                                            <span class="lang-en">Air Temp</span>
+                                        </div>
                                         <div class="mt-2 flex items-end gap-2">
                                             <div class="text-4xl font-semibold text-slate-900 tabular-nums"
                                                 id="temperature-value">--</div>
@@ -139,7 +158,10 @@
                                 </div>
                                 <div class="mt-4 flex items-center gap-2 text-sm text-slate-600">
                                     <span id="dot-sensor" class="av-status-dot av-status-dot--warn"></span>
-                                    <span id="sensor-status-text">Menunggu data…</span>
+                                    <span id="sensor-status-text">
+                                        <span class="lang-id">Menunggu data…</span>
+                                        <span class="lang-en">Waiting for data...</span>
+                                    </span>
                                 </div>
                             </div>
 
@@ -148,7 +170,9 @@
                                 <div class="flex items-start justify-between">
                                     <div>
                                         <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                            Kelembaban</div>
+                                            <span class="lang-id">Kelembaban</span>
+                                            <span class="lang-en">Humidity</span>
+                                        </div>
                                         <div class="mt-2 flex items-end gap-2">
                                             <div class="text-4xl font-semibold text-slate-900 tabular-nums"
                                                 id="humidity-value">--</div>
@@ -160,8 +184,10 @@
                                         <i class="fa-solid fa-droplet"></i>
                                     </div>
                                 </div>
-                                <div class="mt-4 text-sm text-slate-600" id="humidity-hint">Tip: ideal indoor 40–60%
-                                    (sekadar referensi).</div>
+                                <div class="mt-4 text-sm text-slate-600" id="humidity-hint">
+                                    <span class="lang-id">Tip: ideal indoor 40–60% (sekadar referensi).</span>
+                                    <span class="lang-en">Tip: ideal indoor 40–60% (reference only).</span>
+                                </div>
                             </div>
 
                             <!-- System card -->
@@ -169,7 +195,9 @@
                                 <div class="flex items-start justify-between">
                                     <div>
                                         <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                            Koneksi Perangkat</div>
+                                            <span class="lang-id">Koneksi Perangkat</span>
+                                            <span class="lang-en">Device Connection</span>
+                                        </div>
                                         <div class="mt-2 flex items-end gap-2">
                                             <div class="text-4xl font-semibold text-slate-900 tabular-nums"
                                                 id="system-health">--</div>
@@ -201,8 +229,14 @@
                         <div class="av-card p-6">
                             <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                                 <div>
-                                    <div class="text-sm font-semibold text-slate-900">Grafik 24 data terakhir</div>
-                                    <div class="text-xs text-slate-500">Garis biru: suhu • garis cyan: kelembaban</div>
+                                    <div class="text-sm font-semibold text-slate-900">
+                                        <span class="lang-id">Grafik 24 data terakhir</span>
+                                        <span class="lang-en">Last 24 data records chart</span>
+                                    </div>
+                                    <div class="text-xs text-slate-500">
+                                        <span class="lang-id">Garis biru: suhu &bull; garis cyan: kelembaban</span>
+                                        <span class="lang-en">Blue line: temp &bull; cyan line: humidity</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-3">
@@ -210,22 +244,34 @@
                             </div>
                             <div class="mt-4 grid gap-3 sm:grid-cols-4">
                                 <div class="rounded-2xl border border-slate-200 bg-white p-4">
-                                    <div class="text-xs text-slate-500">Suhu max</div>
+                                    <div class="text-xs text-slate-500">
+                                        <span class="lang-id">Suhu maskimal</span>
+                                        <span class="lang-en">Max temp</span>
+                                    </div>
                                     <div class="mt-1 text-lg font-semibold text-slate-900 tabular-nums" id="temp-max">
                                         --</div>
                                 </div>
                                 <div class="rounded-2xl border border-slate-200 bg-white p-4">
-                                    <div class="text-xs text-slate-500">Suhu min</div>
+                                    <div class="text-xs text-slate-500">
+                                        <span class="lang-id">Suhu minimal</span>
+                                        <span class="lang-en">Min temp</span>
+                                    </div>
                                     <div class="mt-1 text-lg font-semibold text-slate-900 tabular-nums" id="temp-min">
                                         --</div>
                                 </div>
                                 <div class="rounded-2xl border border-slate-200 bg-white p-4">
-                                    <div class="text-xs text-slate-500">Avg humidity</div>
+                                    <div class="text-xs text-slate-500">
+                                        <span class="lang-id">Rata-rata kelembaban</span>
+                                        <span class="lang-en">Avg humidity</span>
+                                    </div>
                                     <div class="mt-1 text-lg font-semibold text-slate-900 tabular-nums"
                                         id="humidity-avg">--</div>
                                 </div>
                                 <div class="rounded-2xl border border-slate-200 bg-white p-4">
-                                    <div class="text-xs text-slate-500">Uptime (perkiraan)</div>
+                                    <div class="text-xs text-slate-500">
+                                        <span class="lang-id">Uptime (perkiraan)</span>
+                                        <span class="lang-en">Estimated Uptime</span>
+                                    </div>
                                     <div class="mt-1 text-lg font-semibold text-slate-900 tabular-nums"
                                         id="system-uptime">--</div>
                                 </div>
@@ -233,11 +279,13 @@
 
                             <div class="mt-4 hidden rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900"
                                 id="banner-empty">
-                                Belum ada data history. Nyalakan alat, lalu tunggu beberapa kali pengiriman data.
+                                <span class="lang-id">Belum ada data history. Nyalakan alat, lalu tunggu beberapa kali pengiriman data.</span>
+                                <span class="lang-en">No historical data available. Turn on the device and wait for a few data transmissions.</span>
                             </div>
                             <div class="mt-4 hidden rounded-2xl border border-rose-300 bg-rose-50 px-4 py-3 text-sm text-rose-900"
                                 id="banner-error">
-                                Gagal mengambil data dari API. Pastikan server Laravel nyala dan URL sesuai.
+                                <span class="lang-id">Gagal mengambil data dari API. Pastikan server Laravel menyala dan URL sesuai.</span>
+                                <span class="lang-en">Failed to fetch API data. Please ensure the Laravel server is running and the URL is correct.</span>
                             </div>
                         </div>
                     </div>
@@ -246,28 +294,41 @@
                     <div class="lg:col-span-1">
                         <div class="av-card p-6">
                             <div class="flex items-center justify-between">
-                                <div class="text-sm font-semibold text-slate-900">History terbaru</div>
+                                <div class="text-sm font-semibold text-slate-900">
+                                    <span class="lang-id">Riwayat Terbaru</span>
+                                    <span class="lang-en">Recent History</span>
+                                </div>
                                 <div class="text-xs text-slate-500" id="history-count">0 data</div>
                             </div>
                             <div class="mt-4 overflow-hidden rounded-2xl border border-slate-200">
                                 <table class="w-full text-left text-sm">
                                     <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-600">
                                         <tr>
-                                            <th class="px-4 py-3">Waktu</th>
-                                            <th class="px-4 py-3">Suhu</th>
+                                            <th class="px-4 py-3">
+                                                <span class="lang-id">Waktu</span>
+                                                <span class="lang-en">Time</span>
+                                            </th>
+                                            <th class="px-4 py-3">
+                                                <span class="lang-id">Suhu</span>
+                                                <span class="lang-en">Temp</span>
+                                            </th>
                                             <th class="px-4 py-3">Hum</th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-slate-200 bg-white" id="history-rows">
                                         <tr>
-                                            <td class="px-4 py-3 text-slate-500" colspan="3">Menunggu data…</td>
+                                            <td class="px-4 py-3 text-slate-500" colspan="3">
+                                                <span class="lang-id">Menunggu data…</span>
+                                                <span class="lang-en">Waiting for data...</span>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
 
                             <div class="mt-4 text-xs text-slate-500">
-                                Catatan: tampilan ini akan makin terisi setelah perangkat mulai kirim data berkala.
+                                <span class="lang-id">Catatan: tampilan ini akan semakin terisi setelah perangkat mulai mengirim data dan akan di saring setiap 30 menit.</span>
+                                <span class="lang-en">Note: this view will populate as the device sends periodic data and will be filtered every 30 minutes.</span>
                             </div>
                         </div>
                     </div>
@@ -311,25 +372,52 @@
         }
 
         function computeHealth(secondsSinceUpdate) {
-            if (secondsSinceUpdate <= 15) return {
+            // Updated thresholds for 30-minute polling interval
+            if (secondsSinceUpdate <= 2100) return { // 35 minutes grace period
                 pct: 100,
-                label: 'Baik',
+                labelId: 'Baik',
+                labelEn: 'Good',
                 level: 'ok'
             };
-            if (secondsSinceUpdate <= 60) return {
+            if (secondsSinceUpdate <= 3600) return { // 1 hour
                 pct: 75,
-                label: 'Stabil',
+                labelId: 'Stabil',
+                labelEn: 'Stable',
                 level: 'ok'
             };
-            if (secondsSinceUpdate <= 180) return {
+            if (secondsSinceUpdate <= 5400) return { // 1.5 hours
                 pct: 45,
-                label: 'Terlambat',
+                labelId: 'Terlambat',
+                labelEn: 'Delayed',
                 level: 'warn'
             };
             return {
                 pct: 10,
-                label: 'Offline',
+                labelId: 'Offline',
+                labelEn: 'Offline',
                 level: 'bad'
+            };
+        }
+
+        function formatRelativeTimeBilingual(seconds) {
+            if (seconds <= 60) return {
+                id: 'Online &bull; realtime',
+                en: 'Online &bull; realtime'
+            };
+            const m = Math.floor(seconds / 60);
+            if (m < 60) return {
+                id: `Update terakhir ${m} menit lalu`,
+                en: `Last updated ${m} mins ago`
+            };
+            const h = Math.floor(m / 60);
+            if (h < 24) return {
+                id: `Update terakhir ${h} jam lalu`,
+                en: `Last updated ${h} hours ago`
+            };
+            const d = Math.floor(h / 24);
+            return {
+                id: `Update terakhir ${d} hari lalu`,
+                en: `Last updated ${d} days ago`
             };
         }
 
@@ -343,10 +431,10 @@
                 el('temperature-value').textContent = '--';
                 el('humidity-value').textContent = '--';
                 el('system-health').textContent = '--';
-                el('system-text').textContent = '--';
+                el('system-text').innerHTML = '--';
                 lastUpdatedEl.textContent = '--';
                 setDotStatus(dot, 'warn');
-                statusText.textContent = 'Menunggu data…';
+                statusText.innerHTML = '<span class="lang-id">Menunggu data…</span><span class="lang-en">Waiting for data...</span>';
                 return;
             }
 
@@ -358,11 +446,12 @@
             el('temperature-value').textContent = Number(latest.temperature).toFixed(1);
             el('humidity-value').textContent = Number(latest.humidity).toFixed(0);
             el('system-health').textContent = String(health.pct);
-            el('system-text').textContent = health.label;
+            el('system-text').innerHTML = `<span class="lang-id">${health.labelId}</span><span class="lang-en">${health.labelEn}</span>`;
             lastUpdatedEl.textContent = formatTime(latest.timestamp);
 
             setDotStatus(dot, health.level);
-            statusText.textContent = seconds <= 60 ? 'Online • realtime' : `Update terakhir ${Math.round(seconds)}s lalu`;
+            const relTime = formatRelativeTimeBilingual(seconds);
+            statusText.innerHTML = `<span class="lang-id">${relTime.id}</span><span class="lang-en">${relTime.en}</span>`;
         }
 
         function renderStats() {
@@ -407,7 +496,10 @@
             if (!rows.length) {
                 tbody.innerHTML = `
                     <tr>
-                        <td class="px-4 py-3 text-slate-500" colspan="3">Belum ada data.</td>
+                        <td class="px-4 py-3 text-slate-500" colspan="3">
+                            <span class="lang-id">Belum ada data.</span>
+                            <span class="lang-en">No data yet.</span>
+                        </td>
                     </tr>
                 `;
                 return;
@@ -572,6 +664,7 @@
         window.addEventListener('resize', () => drawChart());
 
         refreshAll();
-        setInterval(refreshAll, 5000);
+        // Set polling interval to 30 minutes (30 * 60 * 1000)
+        setInterval(refreshAll, 1800000);
     </script>
-</x-guest-layout>
+</x-public-layout>

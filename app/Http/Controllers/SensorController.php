@@ -31,13 +31,33 @@ class SensorController extends Controller
             'humidity' => 'required|numeric',
         ]);
 
-        // Simpan data ke file JSON (bisa diganti dengan database)
+        // Simpan data ke memori sementara (array)
         $data = [
             'temperature' => $validated['temperature'],
             'humidity' => $validated['humidity'],
             'timestamp' => Carbon::now()->toIso8601String(),
             'ip' => $request->ip(),
         ];
+
+        // ===== CEK INTERVAL 30 MENIT =====
+        $latestDataJson = Storage::disk('local')->get('sensor/latest.json');
+        if ($latestDataJson) {
+            $latestData = json_decode($latestDataJson, true);
+            if (isset($latestData['timestamp'])) {
+                $lastTime = Carbon::parse($latestData['timestamp']);
+                $now = Carbon::now();
+                $diffMinutes = $lastTime->diffInMinutes($now);
+                
+                // Jika jarak dengan data terakhir kurang dari 30 menit, abaikan simpan
+                if ($diffMinutes < 30) {
+                    return response()->json([
+                        'status' => 'ignored',
+                        'message' => 'Data disaring: Harus berjarak minimal 30 menit dari data sebelumnya (Baru ' . $diffMinutes . ' menit berlalu)',
+                        'data' => $data,
+                    ], 200); // Response 200 agar ESP tidak mengira error
+                }
+            }
+        }
 
         // Simpan data terbaru
         Storage::disk('local')->put('sensor/latest.json', json_encode($data, JSON_PRETTY_PRINT));
