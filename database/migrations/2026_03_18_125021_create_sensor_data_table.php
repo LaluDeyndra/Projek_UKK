@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('sensor_data', function (Blueprint $table) {
             $table->id();
+            $table->double('temperature');
+            $table->double('humidity');
+            $table->string('ip_address')->nullable();
             $table->timestamps();
         });
     }

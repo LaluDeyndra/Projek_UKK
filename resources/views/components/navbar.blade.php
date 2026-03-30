@@ -15,13 +15,13 @@
         -webkit-backdrop-filter: blur(10px);
         border: 1px solid transparent;
         border-bottom-color: var(--av-border);
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
-                    background-color 0.3s ease,
-                    top 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                    width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                    max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                    border-radius 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                    box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+            background-color 0.3s ease,
+            top 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+            width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+            max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+            border-radius 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+            box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         transform: translateY(0);
     }
 
@@ -129,13 +129,16 @@
         top: 0;
         left: 0;
         height: 100%;
-        width: 280px;
-        max-width: 90%;
-        background: var(--av-surface);
-        padding: 2rem 1.5rem;
-        box-shadow: 8px 0 24px rgba(0, 0, 0, 0.2);
+        width: 300px;
+        max-width: 85%;
+        background: color-mix(in srgb, var(--av-surface) 85%, transparent);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-right: 1px solid var(--av-border);
+        padding: 2.5rem 1.5rem;
+        box-shadow: 10px 0 40px rgba(0, 0, 0, 0.25);
         transform: translateX(-100%);
-        transition: transform 0.5s ease;
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         overflow-y: auto;
     }
 
@@ -145,41 +148,89 @@
 
     .sidebar-close {
         position: absolute;
-        top: 1rem;
-        right: 1rem;
-        background: none;
-        border: none;
-        font-size: 1.75rem;
+        top: 1.25rem;
+        right: 1.25rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--av-surface-2);
+        border: 1px solid var(--av-border);
+        border-radius: 50%;
+        font-size: 1.25rem;
         cursor: pointer;
-        color: #6b7280;
+        color: var(--av-text);
+        transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        z-index: 10;
+        /* Increase touch target area invisibly */
+        padding: 0;
     }
 
-    .sidebar-close:hover {
-        color: #1f2937;
+    .sidebar-close::after {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+    }
+
+    @media (hover: hover) {
+        .sidebar-close:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .sidebar-close:hover i {
+            transform: rotate(90deg);
+        }
+
+        .sidebar-close:active {
+            transform: scale(0.92);
+        }
+    }
+
+    .sidebar-close i {
+        transition: transform 0.3s ease;
     }
 
     .sidebar a {
+        position: relative;
         display: flex;
         align-items: center;
-        gap: 0.75rem;
-        padding: 0.75rem 0;
+        gap: 1.25rem;
+        padding: 1rem 1.25rem;
         color: var(--av-text);
         text-decoration: none;
         font-weight: 600;
-        transition: color 0.2s, background 0.2s;
-        border-radius: 0.5rem;
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
-    }
-
-    .sidebar a:hover {
-        color: var(--av-primary);
-        background: color-mix(in srgb, var(--av-primary) 12%, transparent);
+        font-size: 1.05rem;
+        border-radius: 1rem;
+        margin-bottom: 0.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
     }
 
     .sidebar a i {
         font-size: 1.25rem;
-        width: 1.5rem;
+        width: 24px;
+        text-align: center;
+        color: var(--av-muted);
+        transition: color 0.3s ease;
+    }
+
+    .sidebar a:hover {
+        background: rgba(0, 0, 0, 0.03);
+        transform: translateX(4px);
+    }
+
+    .sidebar a:hover i {
+        color: var(--av-primary-2);
+    }
+
+    .sidebar a.active {
+        background: color-mix(in srgb, var(--av-primary) 12%, transparent);
         text-align: center;
     }
 
@@ -249,7 +300,8 @@
         transition: transform 0.15s ease, background 0.2s ease;
         font-weight: 600;
         white-space: nowrap;
-        flex-shrink: 0; /* Anti menumpuk/squish */
+        flex-shrink: 0;
+        /* Anti menumpuk/squish */
     }
 
     .theme-toggle:hover {
@@ -441,9 +493,14 @@
     }
 
     @media (max-width: 1024px) {
-        .control-text { display: none !important; }
-        .chevron-icon { display: none !important; }
-        
+        .control-text {
+            display: none !important;
+        }
+
+        .chevron-icon {
+            display: none !important;
+        }
+
         .theme-toggle {
             padding: 0;
             width: 2.25rem;
@@ -487,9 +544,11 @@
         }
 
         .search-footer {
-            display: none; /* Hide kbd shortcut hints on mobile */
+            display: none;
+            /* Hide kbd shortcut hints on mobile */
         }
     }
+
     /* Global Search Modal Styles */
     .search-modal {
         position: fixed;
@@ -545,11 +604,13 @@
 
     .search-header input {
         flex: 1;
-        min-width: 0; /* Allow input to shrink below placeholder width */
+        min-width: 0;
+        /* Allow input to shrink below placeholder width */
         background: transparent;
         border: none !important;
         outline: none !important;
-        box-shadow: none !important; /* Remove Tailwind forms focus ring */
+        box-shadow: none !important;
+        /* Remove Tailwind forms focus ring */
         font-size: 1.25rem;
         color: var(--av-text);
         font-weight: 500;
@@ -562,7 +623,8 @@
     }
 
     .search-close {
-        flex-shrink: 0; /* Prevent the close button from disappearing */
+        flex-shrink: 0;
+        /* Prevent the close button from disappearing */
         background: color-mix(in srgb, var(--av-surface-2) 60%, transparent);
         border: none;
         color: var(--av-text);
@@ -591,9 +653,11 @@
     .search-results::-webkit-scrollbar {
         width: 8px;
     }
+
     .search-results::-webkit-scrollbar-track {
         background: transparent;
     }
+
     .search-results::-webkit-scrollbar-thumb {
         background: color-mix(in srgb, var(--av-border) 80%, transparent);
         border-radius: 4px;
@@ -612,7 +676,8 @@
         border: 1px solid transparent;
     }
 
-    .search-item:hover, .search-item.active {
+    .search-item:hover,
+    .search-item.active {
         background: color-mix(in srgb, var(--av-primary) 8%, transparent);
         border-color: color-mix(in srgb, var(--av-primary) 20%, transparent);
         transform: translateX(4px);
@@ -675,7 +740,7 @@
         font-family: monospace;
         font-size: 0.75rem;
         border: 1px solid var(--av-border);
-        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         color: var(--av-text);
         font-weight: bold;
     }
@@ -686,7 +751,8 @@
     <div class="search-container" id="searchContainer">
         <div class="search-header">
             <i class="fas fa-search search-icon"></i>
-            <input type="text" id="searchInput" placeholder="Search across Arctic Vision... (Press '/')" autocomplete="off">
+            <input type="text" id="searchInput" placeholder="Search across Arctic Vision... (Press '/')"
+                autocomplete="off">
             <button class="search-close" onclick="closeSearchModal()"><i class="fas fa-times"></i></button>
         </div>
         <div class="search-results" id="searchResults">
@@ -694,15 +760,15 @@
         </div>
         <div class="search-footer">
             <div class="search-kbd-group">
-                <kbd>&uarr;</kbd> <kbd>&darr;</kbd> 
+                <kbd>&uarr;</kbd> <kbd>&darr;</kbd>
                 <span class="lang-id">navigasi</span><span class="lang-en">navigate</span>
             </div>
             <div class="search-kbd-group">
-                <kbd>&crarr;</kbd> 
+                <kbd>&crarr;</kbd>
                 <span class="lang-id">pilih</span><span class="lang-en">select</span>
             </div>
             <div class="search-kbd-group">
-                <kbd>Esc</kbd> 
+                <kbd>Esc</kbd>
                 <span class="lang-id">tutup</span><span class="lang-en">close</span>
             </div>
         </div>
@@ -738,7 +804,7 @@
                 <span class="lang-en">Home</span>
             </a>
             <a href="{{ route('monitoring') }}">Monitoring</a>
-            <a href="#encyclopedia">
+            <a href="{{ route('encyclopedia') }}">
                 <span class="lang-id">Ensiklopedia</span>
                 <span class="lang-en">Encyclopedia</span>
             </a>
@@ -752,9 +818,10 @@
             <!-- Controls that are ALWAYS visible, even on mobile -->
             <button type="button" class="theme-toggle" onclick="openSearchModal()" aria-label="Search" title="Search">
                 <i class="fas fa-search"></i>
-                <span class="control-text" style="font-size: 0.9rem; font-family: monospace; opacity: 0.7; margin-left: 0.15rem; font-weight: bold;">/</span>
+                <span class="control-text"
+                    style="font-size: 0.9rem; font-family: monospace; opacity: 0.7; margin-left: 0.15rem; font-weight: bold;">/</span>
             </button>
-            
+
             <div class="theme-dropdown-container">
                 <button type="button" class="theme-toggle" onclick="openLangDropdown()" aria-label="Translate">
                     <i class="fas fa-globe"></i>
@@ -762,14 +829,17 @@
                         <span class="lang-id">ID</span>
                         <span class="lang-en">EN</span>
                     </span>
-                    <i class="fas fa-chevron-down chevron-icon" style="font-size: 0.8rem; margin-left: 0.25rem; color: var(--av-muted);"></i>
+                    <i class="fas fa-chevron-down chevron-icon"
+                        style="font-size: 0.8rem; margin-left: 0.25rem; color: var(--av-muted);"></i>
                 </button>
                 <div id="langDropdown" class="theme-dropdown-menu">
                     <button class="theme-option lang-opt-id" onclick="setLangOption('id')">
-                        <span style="width: 1.5rem; text-align: center; font-weight: bold; font-size: 0.8rem;">ID</span> Indonesia
+                        <span style="width: 1.5rem; text-align: center; font-weight: bold; font-size: 0.8rem;">ID</span>
+                        Indonesia
                     </button>
                     <button class="theme-option lang-opt-en" onclick="setLangOption('en')">
-                        <span style="width: 1.5rem; text-align: center; font-weight: bold; font-size: 0.8rem;">EN</span> English
+                        <span style="width: 1.5rem; text-align: center; font-weight: bold; font-size: 0.8rem;">EN</span>
+                        English
                     </button>
                 </div>
             </div>
@@ -777,8 +847,10 @@
             <div class="theme-dropdown-container">
                 <button type="button" class="theme-toggle" onclick="openThemeDropdown()" aria-label="Pilih tema">
                     <i id="themeIcon" class="fas fa-desktop"></i>
-                    <span id="themeText" class="control-text" style="font-size: 0.9rem; margin-left: 0.25rem;">System</span>
-                    <i class="fas fa-chevron-down chevron-icon" style="font-size: 0.8rem; margin-left: 0.25rem; color: var(--av-muted);"></i>
+                    <span id="themeText" class="control-text"
+                        style="font-size: 0.9rem; margin-left: 0.25rem;">System</span>
+                    <i class="fas fa-chevron-down chevron-icon"
+                        style="font-size: 0.8rem; margin-left: 0.25rem; color: var(--av-muted);"></i>
                 </button>
                 <div id="themeDropdown" class="theme-dropdown-menu">
                     <button class="theme-option" onclick="setThemeOption('light')">
@@ -794,13 +866,15 @@
             </div>
 
             <!-- Mobile hamburger -->
-            <button class="navbar-hamburger" aria-label="Buka menu" onclick="openMobileNav()" style="margin-left: 0.5rem;">
+            <button class="navbar-hamburger" aria-label="Buka menu" onclick="openMobileNav()"
+                style="margin-left: 0.5rem;">
                 <i class="fas fa-bars"></i>
             </button>
 
             @auth
                 <div class="navbar-auth">
-                    <span style="color: var(--av-text); margin-left: 0.5rem; font-weight: 500;">{{ Auth::user()->name }}</span>
+                    <span
+                        style="color: var(--av-text); margin-left: 0.5rem; font-weight: 500;">{{ Auth::user()->name }}</span>
                     <a href="{{ url('/dashboard') }}" class="btn-dashboard">Dashboard</a>
                 </div>
             @endauth
@@ -811,46 +885,82 @@
 <!-- Mobile sidebar navigation -->
 <div id="mobileNav" class="sidebar-overlay" onclick="closeMobileNav(event)">
     <div class="sidebar" role="menu" aria-label="Menu navigasi">
-        <button class="sidebar-close" aria-label="Tutup menu" onclick="closeMobileNav(event)">&times;</button>
-        <div style="text-align: center; margin-bottom: 1.5rem; padding-top: 1rem;">
-            <div class="navbar-icon" style="margin: 0 auto 0.5rem;">
+        <button class="sidebar-close" aria-label="Tutup menu" onclick="closeMobileNav(event)">
+            <i class="fas fa-xmark"></i>
+        </button>
+
+        <div style="text-align: center; margin-bottom: 2rem; margin-top: 1rem; position: relative;">
+            <div class="navbar-icon"
+                style="margin: 0 auto 1rem; width: 3.5rem; height: 3.5rem; font-size: 1.75rem; box-shadow: 0 4px 20px rgba(56, 189, 248, 0.25);">
                 <i class="fas fa-snowflake"></i>
             </div>
-            <div style="font-weight: bold; color: var(--av-primary-2);">Arctic Vision</div>
-            <div class="lang-id" style="font-size: 0.875rem; color: var(--av-muted);">Menu Navigasi</div>
-            <div class="lang-en" style="font-size: 0.875rem; color: var(--av-muted);">Navigation Menu</div>
-            
+            <div
+                style="font-weight: 800; font-size: 1.25rem; background: linear-gradient(135deg, var(--av-primary-2), var(--av-primary)); -webkit-background-clip: text; color: transparent;">
+                Arctic Vision
+            </div>
+            <div class="lang-id"
+                style="font-size: 0.75rem; color: var(--av-muted); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 0.4rem; font-weight: 700;">
+                Menu Navigasi
+            </div>
+            <div class="lang-en"
+                style="font-size: 0.75rem; color: var(--av-muted); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 0.4rem; font-weight: 700;">
+                Navigation Menu
+            </div>
         </div>
-        <a href="{{ route('welcome') }}" onclick="closeMobileNav(event)">
-            <i class="fas fa-home"></i>
-            <span class="lang-id">Beranda</span>
-            <span class="lang-en">Home</span>
-        </a>
-        <a href="{{ route('monitoring') }}" onclick="closeMobileNav(event)">
-            <i class="fas fa-chart-line"></i>
-            <span>Monitoring</span>
-        </a>
-        <a href="#encyclopedia" onclick="closeMobileNav(event)">
-            <i class="fas fa-book"></i>
-            <span class="lang-id">Ensiklopedia</span>
-            <span class="lang-en">Encyclopedia</span>
-        </a>
-        <a href="{{ route('about') }}" onclick="closeMobileNav(event)">
-            <i class="fas fa-info-circle"></i>
-            <span class="lang-id">Tentang</span>
-            <span class="lang-en">About</span>
-        </a>
+
+        <div class="sidebar-links">
+            <a href="{{ route('welcome') }}" class="{{ request()->routeIs('welcome') ? 'active' : '' }}"
+                onclick="closeMobileNav(event)">
+                <i class="fas fa-home"></i>
+                <div style="display: flex; flex-direction: column;">
+                    <span class="lang-id">Beranda</span>
+                    <span class="lang-en">Home</span>
+                </div>
+            </a>
+
+            <a href="{{ route('monitoring') }}" class="{{ request()->routeIs('monitoring') ? 'active' : '' }}"
+                onclick="closeMobileNav(event)">
+                <i class="fas fa-chart-line"></i>
+                <div style="display: flex; flex-direction: column;">
+                    <span>Monitoring</span>
+                </div>
+            </a>
+
+            <a href="{{ route('encyclopedia') }}" class="{{ request()->routeIs('encyclopedia') ? 'active' : '' }}"
+                onclick="closeMobileNav(event)">
+                <i class="fas fa-book"></i>
+                <div style="display: flex; flex-direction: column;">
+                    <span class="lang-id">Ensiklopedia</span>
+                    <span class="lang-en">Encyclopedia</span>
+                </div>
+            </a>
+
+            <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}"
+                onclick="closeMobileNav(event)">
+                <i class="fas fa-info-circle"></i>
+                <div style="display: flex; flex-direction: column;">
+                    <span class="lang-id">Tentang Kami</span>
+                    <span class="lang-en">About Us</span>
+                </div>
+            </a>
+        </div>
 
         @auth
-            <div class="sidebar-divider"></div>
-            <div style="padding: 0.75rem 0; color: var(--av-text); font-weight: 600;">
-                <i class="fas fa-user" style="margin-right: 0.5rem;"></i>
-                {{ Auth::user()->name }}
+            <div class="sidebar-divider" style="margin: 1.5rem 0;"></div>
+            <div
+                style="padding: 0.75rem 1rem; color: var(--av-text); font-weight: 600; display: flex; align-items: center; gap: 0.75rem; background: color-mix(in srgb, var(--av-surface-2) 50%, transparent); border-radius: 1rem; margin-bottom: 0.75rem;">
+                <div
+                    style="width: 2rem; height: 2rem; border-radius: 50%; background: var(--av-primary-2); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div style="flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                    {{ Auth::user()->name }}
+                </div>
             </div>
             <a href="{{ url('/dashboard') }}" class="btn-dashboard"
-                style="display: inline-block; width: 100%; text-align: center; margin-top: 0.5rem;"
+                style="display: flex; width: 100%; align-items: center; justify-content: center; gap: 0.75rem; padding: 1rem; border-radius: 1rem; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);"
                 onclick="closeMobileNav(event)">
-                <i class="fas fa-tachometer-alt" style="margin-right: 0.5rem;"></i>
+                <i class="fas fa-tachometer-alt"></i>
                 Dashboard
             </a>
         @endauth
@@ -863,10 +973,10 @@
     function applyThemeUI() {
         const saved = localStorage.getItem('theme') || 'system';
         const isDark = document.documentElement.classList.contains('theme-dark');
-        
+
         let iconClass = 'fas fa-desktop';
         let text = 'System';
-        
+
         if (saved === 'dark') {
             iconClass = 'fas fa-moon';
             text = 'Dark';
@@ -911,9 +1021,9 @@
         const menu = document.getElementById('themeDropdown');
         const container = menu.closest('.theme-dropdown-container');
         const isShowing = menu.classList.contains('show');
-        
+
         closeAllDropdowns();
-        
+
         if (!isShowing) {
             menu.classList.add('show');
             if (container) container.classList.add('open');
@@ -932,7 +1042,7 @@
     function applyLangUI() {
         const saved = localStorage.getItem('lang') || 'id';
         document.documentElement.lang = saved;
-        
+
         document.querySelectorAll('.lang-opt-id, .lang-opt-en').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.lang-opt-' + saved).forEach(btn => btn.classList.add('active'));
     }
@@ -941,9 +1051,9 @@
         const menu = document.getElementById('langDropdown');
         const container = menu.closest('.theme-dropdown-container');
         const isShowing = menu.classList.contains('show');
-        
+
         closeAllDropdowns();
-        
+
         if (!isShowing) {
             menu.classList.add('show');
             if (container) container.classList.add('open');
@@ -960,40 +1070,111 @@
     }
 
     // Global Command Palette Search Logic
-    const searchDataList = [
-        {
-            title: { id: "Beranda - Purwarupa Ekosistem", en: "Home - Ecosystem Prototype" },
-            desc: { id: "Halaman utama beranda visualisasi dan konsep dasar Arctic Vision", en: "Main landing page concept and visualization of Arctic Vision" },
+    const searchDataList = [{
+            title: {
+                id: "Beranda - Purwarupa Ekosistem",
+                en: "Home - Ecosystem Prototype"
+            },
+            desc: {
+                id: "Halaman utama beranda visualisasi dan konsep dasar Arctic Vision",
+                en: "Main landing page concept and visualization of Arctic Vision"
+            },
             url: "{{ route('welcome') }}",
             icon: "fas fa-home"
         },
         {
-            title: { id: "Monitoring - Data Sensor Realtime", en: "Monitoring - Realtime Sensor Data" },
-            desc: { id: "Pantau suhu dan kelembaban langsung dari perangkat mikrokontroler IoT", en: "Monitor live temperature and humidity data from the IoT microcontroller" },
+            title: {
+                id: "Monitoring - Data Sensor Realtime",
+                en: "Monitoring - Realtime Sensor Data"
+            },
+            desc: {
+                id: "Pantau suhu dan kelembaban langsung dari perangkat mikrokontroler IoT",
+                en: "Monitor live temperature and humidity data from the IoT microcontroller"
+            },
             url: "{{ route('monitoring') }}",
             icon: "fas fa-chart-line"
         },
         {
-            title: { id: "Ensiklopedia - Fauna Arktik", en: "Encyclopedia - Arctic Fauna" },
-            desc: { id: "Informasi detail, adaptasi lingkungan, dan catatan hewan kutub", en: "Detailed information, environmental adaptation, and records of polar animals" },
-            url: "#encyclopedia",
+            title: {
+                id: "Ensiklopedia - Fauna Arktik",
+                en: "Encyclopedia - Arctic Fauna"
+            },
+            desc: {
+                id: "Informasi detail, adaptasi lingkungan, dan catatan hewan kutub",
+                en: "Detailed information, environmental adaptation, and records of polar animals"
+            },
+            url: "{{ route('encyclopedia') }}",
             icon: "fas fa-book"
         },
         {
-            title: { id: "Tentang Kami (Profil)", en: "About Us (Profile)" },
-            desc: { id: "Misi, visi, edukasi lingkungan dan konsep maket miniatur kami", en: "Our environmental mission, vision, and miniature diorama education concept" },
+            title: {
+                id: "Beruang Kutub (Polar Bear)",
+                en: "Polar Bear (Ursus maritimus)"
+            },
+            desc: {
+                id: "Penguasa lautan es, mamalia darat karnivora terbesar di bumi",
+                en: "The ruler of the sea ice, the largest terrestrial carnivore on earth"
+            },
+            url: "{{ route('encyclopedia.show', 'polar-bear') }}",
+            icon: "fas fa-paw"
+        },
+        {
+            title: {
+                id: "Rusa Kutub / Karibu (Reindeer)",
+                en: "Reindeer / Caribou (Rangifer tarandus)"
+            },
+            desc: {
+                id: "Penjelajah tundra abadi dengan tanduk megah pada jantan dan betina",
+                en: "Eternal tundra wanderers with magnificent antlers on both males and females"
+            },
+            url: "{{ route('encyclopedia.show', 'reindeer') }}",
+            icon: "fas fa-paw"
+        },
+        {
+            title: {
+                id: "Anjing Laut Arktik (Arctic Seal)",
+                en: "Arctic Seal (Phocidae)"
+            },
+            desc: {
+                id: "Penyelam ahli berdarah panas yang menaklukkan perairan beku",
+                en: "Warm-blooded master divers conquering the frozen waters"
+            },
+            url: "{{ route('encyclopedia.show', 'seal') }}",
+            icon: "fas fa-paw"
+        },
+        {
+            title: {
+                id: "Tentang Kami (Profil)",
+                en: "About Us (Profile)"
+            },
+            desc: {
+                id: "Misi, visi, edukasi lingkungan dan konsep maket miniatur kami",
+                en: "Our environmental mission, vision, and miniature diorama education concept"
+            },
             url: "{{ route('about') }}",
             icon: "fas fa-info-circle"
         },
         {
-            title: { id: "Kebijakan Privasi", en: "Privacy Policy" },
-            desc: { id: "Aturan pengumpulan data dan keamanan informasi", en: "Data collection rules and information security" },
+            title: {
+                id: "Kebijakan Privasi",
+                en: "Privacy Policy"
+            },
+            desc: {
+                id: "Aturan pengumpulan data dan keamanan informasi",
+                en: "Data collection rules and information security"
+            },
             url: "{{ route('privacy-policy') }}",
             icon: "fas fa-shield-alt"
         },
         {
-            title: { id: "Syarat & Ketentuan", en: "Terms of Service" },
-            desc: { id: "Kesepakatan interaksi dan penggunaan layanan Arctic Vision", en: "Interaction agreement and usage of Arctic Vision services" },
+            title: {
+                id: "Syarat & Ketentuan",
+                en: "Terms of Service"
+            },
+            desc: {
+                id: "Kesepakatan interaksi dan penggunaan layanan Arctic Vision",
+                en: "Interaction agreement and usage of Arctic Vision services"
+            },
             url: "{{ route('terms-of-service') }}",
             icon: "fas fa-file-contract"
         }
@@ -1049,7 +1230,7 @@
             const el = document.createElement('a');
             el.href = item.url;
             el.className = 'search-item' + (index === searchSelectedIndex ? ' active' : '');
-            
+
             // Add native hover switching without stealing focus
             el.addEventListener('mouseenter', () => {
                 document.querySelectorAll('.search-item').forEach(i => i.classList.remove('active'));
@@ -1072,16 +1253,17 @@
     document.getElementById('searchInput')?.addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase();
         const currentLang = localStorage.getItem('lang') || 'id';
-        
+
         if (!query.trim()) {
             currentSearchResults = [...searchDataList];
         } else {
             currentSearchResults = searchDataList.filter(item => {
-                const searchStr = item.title[currentLang].toLowerCase() + " " + item.desc[currentLang].toLowerCase();
+                const searchStr = item.title[currentLang].toLowerCase() + " " + item.desc[currentLang]
+                    .toLowerCase();
                 return searchStr.includes(query);
             });
         }
-        
+
         searchSelectedIndex = 0;
         renderSearchResults();
     });
@@ -1092,7 +1274,8 @@
         const isOpen = searchModal && searchModal.classList.contains('show');
 
         // Shortcut to open search (/) or (Ctrl/Cmd + K)
-        if ((e.key === '/' || (e.key === 'k' && (e.ctrlKey || e.metaKey))) && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+        if ((e.key === '/' || (e.key === 'k' && (e.ctrlKey || e.metaKey))) && document.activeElement.tagName !==
+            'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
             e.preventDefault(); // Prevent typing '/' in other fields or native browser search
             if (!isOpen) openSearchModal();
         }
@@ -1109,7 +1292,8 @@
             scrollToActiveItem();
         } else if (e.key === 'ArrowUp') {
             e.preventDefault();
-            searchSelectedIndex = (searchSelectedIndex - 1 + currentSearchResults.length) % currentSearchResults.length;
+            searchSelectedIndex = (searchSelectedIndex - 1 + currentSearchResults.length) % currentSearchResults
+                .length;
             renderSearchResults();
             scrollToActiveItem();
         } else if (e.key === 'Enter' && currentSearchResults.length > 0) {
@@ -1121,7 +1305,10 @@
     function scrollToActiveItem() {
         const items = document.querySelectorAll('.search-item');
         if (items[searchSelectedIndex]) {
-            items[searchSelectedIndex].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            items[searchSelectedIndex].scrollIntoView({
+                block: 'nearest',
+                behavior: 'smooth'
+            });
         }
     }
 
@@ -1136,7 +1323,7 @@
 
     window.addEventListener('scroll', () => {
         const currentScroll = window.scrollY || document.documentElement.scrollTop;
-        
+
         if (isWelcomePage) {
             if (currentScroll < 20) {
                 siteNav.classList.add('navbar-pill');
@@ -1161,7 +1348,9 @@
             siteNav.style.transform = 'translateY(0)';
         }
         sbLastScroll = currentScroll;
-    }, { passive: true });
+    }, {
+        passive: true
+    });
 
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
         if (!localStorage.getItem('theme')) {
@@ -1195,7 +1384,7 @@
         setTimeout(() => {
             overlay.style.display = 'none';
         }, 500);
-        
+
         // Only remove hidden scroll if modal search isn't open
         if (!document.getElementById('searchModal')?.classList.contains('show')) {
             document.body.style.overflow = '';

@@ -286,16 +286,4 @@
         </div>
     </section>
 
-    <section id="encyclopedia" class="section section-white">
-        <div class="section-container">
-            <h2>
-                <span class="lang-id">Encyclopedia - Penghuni Arktik</span>
-                <span class="lang-en">Encyclopedia - Arctic Inhabitants</span>
-            </h2>
-            <p style="text-align: center; color: var(--av-muted); max-width: 32rem; margin: 0 auto;">
-                <span class="lang-id">Jelajahi dunia fauna Arktik dan pelajari bagaimana mereka beradaptasi dengan lingkungan yang ekstrem.</span>
-                <span class="lang-en">Explore the world of Arctic fauna and learn how they adapt to extreme environments.</span>
-            </p>
-        </div>
-    </section>
 </x-public-layout>

@@ -2,7 +2,7 @@
 #define BLYNK_TEMPLATE_NAME "Monitoring Suhu Lalu"
 #define BLYNK_AUTH_TOKEN "qus7-vooO6vz5ayE0ODX2AKZFVRfzU-R"
 
-#include <WiFiClient.h>
+#include <WiFiClientSecure.h>
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266HTTPClient.h>
 #include "DHT.h"
@@ -15,14 +15,14 @@ char ssid[] = "ZTE_2.lalu_2.4G";       // ganti dengan nama WiFi kamu
 char pass[] = "90909090";              // ganti dengan password WiFi kamu
 
 // ===== KONFIGURASI LARAVEL API (SECURE) =====
-const char* server = "monitoring.yourdomain.com";  // Ganti dengan domain/IP Anda
+const char* server = "www.arvi.life";  // Ganti dengan domain/IP utama Anda
 const int port = 443;                  // Port HTTPS
 String apiEndpoint = "/api/sensor/data";
 String apiKey = "arctic_vision_sensor_key_9a7f2b8e1c4d5f6e_secure_token";  // SAMA dengan .env SENSOR_API_KEY
 
 DHT dht(DHTPIN, DHTTYPE);
 BlynkTimer timer;
-WiFiClient wifiClient;
+WiFiClientSecure wifiClient; // WAJIB PAKAI SECURE UNTUK PORT 443 PADA ESP8266
 
 void kirimData() {
   float kelembapan = dht.readHumidity();
@@ -113,6 +113,9 @@ void setup() {
   // Koneksi WiFi dan Blynk
   Blynk.begin(auth, ssid, pass);
   dht.begin();
+  
+  // Mengabaikan pengecekan SSL Certificate karena HTTPS biasa (Ngrok/Cloudflare) menggunakan sertifikat dinamis
+  wifiClient.setInsecure();
 
   // Kirim data ke Blynk + Laravel setiap 2 detik
   timer.setInterval(2000L, kirimData);
