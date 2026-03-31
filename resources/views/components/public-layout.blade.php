@@ -27,6 +27,7 @@
                 else if (savedTheme === 'light') theme = 'light';
                 else theme = prefersDark ? 'dark' : 'light'; // handles 'system' or null
                 document.documentElement.classList.toggle('theme-dark', theme === 'dark');
+                document.documentElement.classList.toggle('dark', theme === 'dark');
 
                 const savedLang = localStorage.getItem('lang') || 'id';
                 document.documentElement.lang = savedLang;
@@ -46,7 +47,7 @@
         :root {
             --av-bg: #ffffff;
             --av-surface: #ffffff;
-            --av-surface-2: #f8fafc;
+            --av-surface-2: #fdfdfe;
             --av-text: #0f172a;
             --av-muted: #64748b;
             --av-border: #e2e8f0;
@@ -345,8 +346,8 @@
         <div class="footer-container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <div class="navbar-icon" style="margin: 0 auto 0.5rem;">
-                        <i class="fas fa-snowflake"></i>
+                    <div style="margin: 0 auto 0.75rem; width: 3.5rem; height: 3.5rem; display: flex; align-items: center; justify-content: center;">
+                        <img src="{{ asset('favicon_io/android-chrome-192x192.png') }}" alt="Arctic Vision" style="width: 100%; height: 100%; object-fit: contain; border-radius: 0.75rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
                     </div>
                     <h3>Arctic Vision</h3>
                     <p>
@@ -365,7 +366,7 @@
                             <span class="lang-en">Home</span>
                         </a></li>
                         <li><a href="{{ route('monitoring') }}">Monitoring</a></li>
-                        <li><a href="#encyclopedia">
+                        <li><a href="{{ route('encyclopedia') }}">
                             <span class="lang-id">Ensiklopedia</span>
                             <span class="lang-en">Encyclopedia</span>
                         </a></li>

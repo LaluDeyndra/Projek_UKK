@@ -20,26 +20,39 @@
                 animation-delay: 4s;
             }
 
+            .av-blob {
+                mix-blend-mode: multiply;
+                filter: blur(120px);
+                opacity: 0.15;
+            }
+            .theme-dark .av-blob {
+                mix-blend-mode: screen;
+                opacity: 0.2;
+            }
+
             /* Glassmorphism Cards */
             .glass-card {
-                background: rgba(255, 255, 255, 0.05);
-                backdrop-filter: blur(16px);
-                -webkit-backdrop-filter: blur(16px);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+                background: rgba(255, 255, 255, 0.65);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border: 1px solid rgba(255, 255, 255, 0.8);
+                box-shadow: 0 10px 40px -10px rgba(31, 38, 135, 0.08);
                 border-radius: 1.5rem;
-                transition: transform 0.3s ease, border-color 0.3s ease;
+                transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
             }
             .theme-dark .glass-card {
-                background: rgba(15, 23, 42, 0.4);
-                border: 1px solid rgba(255, 255, 255, 0.05);
+                background: rgba(15, 23, 42, 0.5);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.3);
             }
             .glass-card:hover {
                 transform: translateY(-5px);
-                border-color: rgba(255, 255, 255, 0.3);
+                border-color: rgba(255, 255, 255, 1);
+                background: rgba(255, 255, 255, 0.85);
             }
             .theme-dark .glass-card:hover {
                 border-color: rgba(56, 189, 248, 0.3);
+                background: rgba(15, 23, 42, 0.7);
             }
 
             /* Status Dots */
@@ -75,27 +88,27 @@
 
             /* Customizing table in glassmorphism */
             .glass-table th {
-                background: rgba(255, 255, 255, 0.05);
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                background: rgba(255, 255, 255, 0.6);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             }
             .glass-table td {
-                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.03);
             }
             .glass-table tr:hover td {
-                background: rgba(255, 255, 255, 0.05);
+                background: rgba(255, 255, 255, 0.8);
             }
-            .theme-dark .glass-table th { background: rgba(0, 0, 0, 0.2); border-color: rgba(255,255,255,0.05); }
+            .theme-dark .glass-table th { background: rgba(0, 0, 0, 0.3); border-color: rgba(255,255,255,0.08); }
             .theme-dark .glass-table td { border-color: rgba(255,255,255,0.05); }
-            .theme-dark .glass-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
+            .theme-dark .glass-table tr:hover td { background: rgba(255, 255, 255, 0.04); }
         </style>
     </x-slot:styles>
 
-    <div class="pt-24 pb-12 min-h-screen relative overflow-hidden bg-slate-50 dark:bg-slate-950">
+    <div class="pt-24 pb-12 min-h-screen relative overflow-hidden transition-colors duration-500" style="background: var(--av-bg);">
         
-        <!-- Animated Background Gradients -->
-        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500 rounded-full mix-blend-screen filter blur-[120px] opacity-30 dark:opacity-20 animate-blob pointer-events-none"></div>
-        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-400 rounded-full mix-blend-screen filter blur-[120px] opacity-30 dark:opacity-20 animate-blob animation-delay-2000 pointer-events-none"></div>
-        <div class="absolute top-1/2 left-1/4 w-[400px] h-[400px] bg-indigo-400 rounded-full mix-blend-screen filter blur-[120px] opacity-20 dark:opacity-10 animate-blob animation-delay-4000 pointer-events-none"></div>
+        <!-- Animated Background Gradients (Optimized for both themes) -->
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500 rounded-full animate-blob av-blob pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-400 rounded-full animate-blob animation-delay-2000 av-blob pointer-events-none"></div>
+        <div class="absolute top-1/2 left-1/4 w-[400px] h-[400px] bg-indigo-400 rounded-full animate-blob animation-delay-4000 av-blob pointer-events-none"></div>
 
         <section class="relative z-10">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -103,7 +116,7 @@
                 <!-- Hero Section Premium -->
                 <div class="text-center mb-16 pt-8">
                     <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-700 dark:text-blue-400 text-xs sm:text-sm font-semibold tracking-wide uppercase mb-6 shadow-sm">
-                        <i class="fas fa-radar text-blue-600 dark:text-blue-400 animate-pulse"></i>
+                        <i class="fas fa-tower-broadcast text-blue-600 dark:text-blue-400 animate-pulse"></i>
                         <span class="lang-id">Pengamatan Atmosfer Real-Time</span>
                         <span class="lang-en">Real-Time Atmospheric Observation</span>
                     </div>
@@ -423,8 +436,23 @@
             
             // Relative time purely for guest UI
             let m = Math.floor(seconds / 60);
-            if(m < 1) statusText.innerHTML = 'Data Real-Time saat ini';
-            else statusText.innerHTML = `Disinkronkan ${m} menit lalu`;
+            let timeId, timeEn;
+            if (m < 1) {
+                timeId = 'Data Real-Time saat ini';
+                timeEn = 'Current Real-Time Data';
+            } else if (m < 60) {
+                timeId = `Disinkronkan ${m} menit lalu`;
+                timeEn = `Synced ${m} mins ago`;
+            } else if (m < 1440) {
+                let h = Math.floor(m / 60);
+                timeId = `Disinkronkan ${h} jam lalu`;
+                timeEn = `Synced ${h} hours ago`;
+            } else {
+                let d = Math.floor(m / 1440);
+                timeId = `Disinkronkan ${d} hari lalu`;
+                timeEn = `Synced ${d} days ago`;
+            }
+            statusText.innerHTML = `<span class="lang-id">${timeId}</span><span class="lang-en">${timeEn}</span>`;
 
             // Trend analysis
             let tempTrend = calculateTrend('temperature', currentTemp, state.history);
@@ -616,5 +644,15 @@
         refreshAll();
         // Polling still standard but math allows us to evaluate "trend" over intervals
         setInterval(refreshAll, 60000); // 1 minute polling to feel "live", though sensor can be any interval
+
+        // Re-draw chart on theme toggle so ticks/grids match the active theme dynamically
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    if (state.history.length > 0) drawChart();
+                }
+            });
+        });
+        observer.observe(document.documentElement, { attributes: true });
     </script>
 </x-public-layout>

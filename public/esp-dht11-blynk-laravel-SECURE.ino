@@ -18,7 +18,7 @@ char pass[] = "90909090";              // ganti dengan password WiFi kamu
 const char* server = "www.arvi.life";  // [Penting] Ganti dengan Domain Ngrok atau IPv4 Laptop Anda
 const int port = 443;               // [Penting] 80 untuk HTTP, 443 untuk HTTPS (Pakai 443 jika Ngrok)
 String apiEndpoint = "/api/sensor/data";
-String apiKey = "cee46326-c1c0-437a-acb3-3073933e868f";  // SAMA PERSIS dengan .env SENSOR_API_KEY
+String apiKey = "";  // SAMA PERSIS dengan .env SENSOR_API_KEY
 
 DHT dht(DHTPIN, DHTTYPE);
 BlynkTimer timer;

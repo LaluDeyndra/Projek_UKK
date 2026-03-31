@@ -968,7 +968,15 @@
 <script>
     function applyThemeUI() {
         const saved = localStorage.getItem('theme') || 'system';
-        const isDark = document.documentElement.classList.contains('theme-dark');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        let shouldBeDark = false;
+        if (saved === 'dark') shouldBeDark = true;
+        else if (saved === 'light') shouldBeDark = false;
+        else shouldBeDark = prefersDark;
+
+        document.documentElement.classList.toggle('theme-dark', shouldBeDark);
+        document.documentElement.classList.toggle('dark', shouldBeDark);
 
         let iconClass = 'fas fa-desktop';
         let text = 'System';
@@ -1003,11 +1011,8 @@
     function setThemeOption(themeMode) {
         if (themeMode === 'system') {
             localStorage.removeItem('theme');
-            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            document.documentElement.classList.toggle('theme-dark', prefersDark);
         } else {
             localStorage.setItem('theme', themeMode);
-            document.documentElement.classList.toggle('theme-dark', themeMode === 'dark');
         }
         applyThemeUI();
         closeAllDropdowns();
@@ -1076,7 +1081,8 @@
                 en: "Main landing page concept and visualization of Arctic Vision"
             },
             url: "{{ route('welcome') }}",
-            icon: "fas fa-home"
+            icon: "fas fa-home",
+            keys: ['beranda', 'home', 'utama', 'awal', 'dashboard', 'pusat', 'ekosistem', 'purwarupa', 'prototype']
         },
         {
             title: {
@@ -1088,7 +1094,8 @@
                 en: "Monitor live temperature and humidity data from the IoT microcontroller"
             },
             url: "{{ route('monitoring') }}",
-            icon: "fas fa-chart-line"
+            icon: "fas fa-chart-line",
+            keys: ['monitoring', 'pantau', 'sensor', 'suhu', 'kelembaban', 'udara', 'iot', 'hardware', 'esp8266', 'data', 'realtime', 'live']
         },
         {
             title: {
@@ -1100,7 +1107,8 @@
                 en: "Detailed information, environmental adaptation, and records of polar animals"
             },
             url: "{{ route('encyclopedia') }}",
-            icon: "fas fa-book"
+            icon: "fas fa-book",
+            keys: ['ensiklopedia', 'buku', 'hewan', 'katalog', 'binatang', 'fauna', 'arktik', 'kutub', 'belajar', 'ilmu', 'pengetahuan', 'pusat']
         },
         {
             title: {
@@ -1112,7 +1120,8 @@
                 en: "The ruler of the sea ice, the largest terrestrial carnivore on earth"
             },
             url: "{{ route('encyclopedia.show', 'polar-bear') }}",
-            icon: "fas fa-paw"
+            icon: "fas fa-paw",
+            keys: ['beruang', 'kutub', 'polar', 'bear', 'karnivora', 'mamalia', 'putih', 'berbahaya', 'hewan']
         },
         {
             title: {
@@ -1124,7 +1133,8 @@
                 en: "Eternal tundra wanderers with magnificent antlers on both males and females"
             },
             url: "{{ route('encyclopedia.show', 'reindeer') }}",
-            icon: "fas fa-paw"
+            icon: "fas fa-paw",
+            keys: ['rusa', 'kutub', 'karibu', 'reindeer', 'tanduk', 'tundra', 'herbivora', 'hewan']
         },
         {
             title: {
@@ -1136,7 +1146,8 @@
                 en: "Warm-blooded master divers conquering the frozen waters"
             },
             url: "{{ route('encyclopedia.show', 'seal') }}",
-            icon: "fas fa-paw"
+            icon: "fas fa-paw",
+            keys: ['anjing', 'laut', 'seal', 'perairan', 'kutub', 'dingin', 'penyelam', 'iklim', 'hewan']
         },
         {
             title: {
@@ -1148,7 +1159,8 @@
                 en: "Our environmental mission, vision, and miniature diorama education concept"
             },
             url: "{{ route('about') }}",
-            icon: "fas fa-info-circle"
+            icon: "fas fa-info-circle",
+            keys: ['tentang', 'kami', 'profil', 'tentang kami', 'about', 'visi', 'misi', 'sekolah', 'informasi', 'kontak', 'siapa', 'pusat', 'bantuan']
         },
         {
             title: {
@@ -1160,7 +1172,8 @@
                 en: "Data collection rules and information security"
             },
             url: "{{ route('privacy-policy') }}",
-            icon: "fas fa-shield-alt"
+            icon: "fas fa-shield-alt",
+            keys: ['privasi', 'kebijakan', 'privacy', 'aturan', 'data', 'keamanan', 'hukum', 'policy', 'pusat']
         },
         {
             title: {
@@ -1172,7 +1185,8 @@
                 en: "Interaction agreement and usage of Arctic Vision services"
             },
             url: "{{ route('terms-of-service') }}",
-            icon: "fas fa-file-contract"
+            icon: "fas fa-file-contract",
+            keys: ['syarat', 'ketentuan', 'terms', 'layanan', 'aturan', 'penggunaan', 'hukum', 'pusat']
         }
     ];
 
@@ -1254,8 +1268,8 @@
             currentSearchResults = [...searchDataList];
         } else {
             currentSearchResults = searchDataList.filter(item => {
-                const searchStr = item.title[currentLang].toLowerCase() + " " + item.desc[currentLang]
-                    .toLowerCase();
+                const keywordStr = item.keys ? item.keys.join(" ") : "";
+                const searchStr = (item.title[currentLang] + " " + item.desc[currentLang] + " " + keywordStr).toLowerCase();
                 return searchStr.includes(query);
             });
         }
