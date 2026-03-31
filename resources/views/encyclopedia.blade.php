@@ -1,5 +1,5 @@
 <x-public-layout>
-    <div class="pt-24 pb-12 min-h-screen">
+    <div class="pt-24 pb-12 min-h-screen overflow-x-hidden">
         <section class="section section-white" style="position: relative; overflow: visible; min-height: 80vh;">
             <!-- Background Elements -->
             <div
