@@ -6,6 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'Arctic Vision' }}</title>
 
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{{ $seo_desc ?? 'Pusat Pemantauan Ekologi Arktik. Menyajikan data iklim mikro real-time dan ensiklopedia satwa untuk masa depan konservasi.' }}">
+    <meta name="keywords" content="Arctic Vision, pemantauan arktik, suhu kutub, IoT lingkungan, ekologi arktik, beruang kutub">
+    <meta name="author" content="Lalu Deyndra">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Open Graph (WhatsApp/Sosmed Preview) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $title ?? 'Arctic Vision' }}">
+    <meta property="og:description" content="{{ $seo_desc ?? 'Pusat Pemantauan Ekologi Arktik. Menyajikan data iklim mikro real-time dan ensiklopedia satwa untuk masa depan konservasi.' }}">
+    <meta property="og:image" content="{{ asset($seo_image ?? 'favicon_io/android-chrome-512x512.png') }}">
+    <meta property="twitter:card" content="summary_large_image">
+
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon_io/apple-touch-icon.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon_io/favicon-32x32.png') }}">

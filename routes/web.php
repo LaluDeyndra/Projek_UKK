@@ -88,6 +88,12 @@ Route::get('/encyclopedia/{slug}', function ($slug) use ($encyclopediaData) {
     return view('encyclopedia-show', ['animal' => $encyclopediaData[$slug]]);
 })->name('encyclopedia.show');
 
+Route::get('/sitemap.xml', function () use ($encyclopediaData) {
+    return response()->view('sitemap', [
+        'encyclopediaData' => $encyclopediaData
+    ])->header('Content-Type', 'text/xml');
+});
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
