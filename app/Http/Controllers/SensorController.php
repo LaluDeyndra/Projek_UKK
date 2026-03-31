@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\SensorData;
+use Illuminate\Support\Facades\Cache;
 
 class SensorController extends Controller
 {
@@ -16,8 +17,8 @@ class SensorController extends Controller
     public function storeSensorData(Request $request)
     {
         // ===== VALIDASI API KEY =====
-        $apiKey = $request->header('X-API-Key');
-        $expectedApiKey = env('SENSOR_API_KEY', 'change-me-in-env');
+        $apiKey = trim($request->header('X-API-Key'));
+        $expectedApiKey = trim(env('SENSOR_API_KEY', 'change-me-in-env'));
 
         if (!$apiKey || $apiKey !== $expectedApiKey) {
             return response()->json([
@@ -31,44 +32,43 @@ class SensorController extends Controller
             'humidity' => 'required|numeric',
         ]);
 
-        // ===== CEK INTERVAL 30 MENIT CEGAT DARI DATABASE =====
-        $latestRecord = SensorData::latest('id')->first();
-        if ($latestRecord) {
-            $diffMinutes = $latestRecord->created_at->diffInMinutes(Carbon::now());
-            
-            // Jika jarak dengan data terakhir kurang dari 30 menit, abaikan simpan
-            if ($diffMinutes < 30) {
-                return response()->json([
-                    'status' => 'ignored',
-                    'message' => 'Data disaring: Harus berjarak minimal 30 menit dari data sebelumnya (Baru ' . $diffMinutes . ' menit berlalu)',
-                    'data' => [
-                        'temperature' => $validated['temperature'],
-                        'humidity' => $validated['humidity'],
-                        'timestamp' => Carbon::now()->toIso8601String(),
-                        'ip' => $request->ip()
-                    ]
-                ], 200); // Response 200 agar ESP tidak mengira error
-            }
-        }
+        $now = Carbon::now();
+        $ip = $request->ip();
 
-        // Simpan data ke Database Asli (MySQL)
-        $sensorData = SensorData::create([
+        $cacheData = [
             'temperature' => $validated['temperature'],
             'humidity' => $validated['humidity'],
-            'ip_address' => $request->ip(),
-        ]);
-
-        $responseData = [
-            'temperature' => $sensorData->temperature,
-            'humidity' => $sensorData->humidity,
-            'timestamp' => $sensorData->created_at->toIso8601String(),
-            'ip' => $sensorData->ip_address,
+            'timestamp' => $now->toIso8601String(),
+            'ip' => $ip,
         ];
 
+        // 1. LAPISAN RAM: Selalu simpan ke Cache untuk status Real-Time instan (Tahan 60 Menit)
+        Cache::put('sensor_latest', $cacheData, $now->addMinutes(60));
+
+        // 2. LAPISAN STORAGE: Cek Interval 30 Menit untuk Database Historis
+        // Menggunakan sistem Cache Lock / Cooldown agar bebas dari bug Timezone antara PHP dan MySQL
+        if (Cache::has('sensor_db_cooldown')) {
+            return response()->json([
+                'status' => 'success-cache',
+                'message' => 'Data Real-Time diperbarui di URL /api/sensor/latest. Database diabaikan (Dalam masa tunggu 30 mnt)',
+                'data' => $cacheData
+            ], 200); 
+        }
+
+        // Kunci penyimpanan Database selama 30 menit ke depan
+        Cache::put('sensor_db_cooldown', true, $now->copy()->addMinutes(30));
+
+        // Simpan permanen ke Database MySQL
+        SensorData::create([
+            'temperature' => $validated['temperature'],
+            'humidity' => $validated['humidity'],
+            'ip_address' => $ip,
+        ]);
+
         return response()->json([
-            'status' => 'success',
-            'message' => 'Data sensor berhasil disimpan ke Database Asli',
-            'data' => $responseData,
+            'status' => 'success-db',
+            'message' => 'Data sensor 30-menitan berhasil masuk ke arsip Database permanently.',
+            'data' => $cacheData,
         ], 201);
     }
 
@@ -78,6 +78,18 @@ class SensorController extends Controller
      */
     public function getLatestData()
     {
+        // Prioritaskan dari Cache (Lebih cepat dan Real-Time)
+        $cachedData = Cache::get('sensor_latest');
+        
+        if ($cachedData) {
+            return response()->json([
+                'status' => 'success',
+                'source' => 'cache',
+                'data' => $cachedData,
+            ]);
+        }
+
+        // Fallback jika RAM Cache kosong (Misal server direstart / cache expired)
         $latestData = SensorData::latest('id')->first();
 
         if (!$latestData) {
@@ -97,6 +109,7 @@ class SensorController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'source' => 'database',
             'data' => $responseData,
         ]);
     }

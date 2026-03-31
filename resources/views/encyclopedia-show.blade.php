@@ -134,7 +134,8 @@
             max-width: 1280px;
             width: 100%;
             margin: 0 auto;
-            padding: 4rem 1.25rem 4rem 1.25rem;
+            /* Added padding-top to prevent overlapping with fixed navbar */
+            padding: 6rem 1.25rem 4rem 1.25rem;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
@@ -142,7 +143,7 @@
 
         @media (min-width: 640px) {
             .animal-hero-content {
-                padding: 3rem 2rem 6rem 2rem;
+                padding: 8rem 2rem 6rem 2rem;
             }
         }
 
@@ -151,7 +152,7 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.6rem 1.25rem;
+            padding: 0.75rem 1.5rem;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -161,14 +162,16 @@
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s ease;
-            margin-top: 0.75rem;
-            font-size: 0.9rem;
+            margin-top: 0;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
         }
 
         @media (min-width: 640px) {
             .back-btn {
-                margin-top: 5rem;
-                padding: 0.75rem 1.5rem;
+                margin-top: 0;
+                margin-bottom: 3rem;
+                padding: 0.85rem 1.75rem;
                 gap: 0.75rem;
                 font-size: 1rem;
             }

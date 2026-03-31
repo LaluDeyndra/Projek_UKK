@@ -792,9 +792,7 @@
 <nav class="navbar">
     <div class="navbar-container">
         <div class="navbar-brand" onclick="openLogoModal()">
-            <div class="navbar-icon">
-                <i class="fas fa-snowflake"></i>
-            </div>
+            <img src="{{ asset('favicon_io/android-chrome-192x192.png') }}" alt="Arctic Vision" style="width: 2.2rem; height: 2.2rem; border-radius: 0.5rem; object-fit: contain; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
             <span>Arctic Vision</span>
         </div>
 
@@ -890,10 +888,8 @@
         </button>
 
         <div style="text-align: center; margin-bottom: 2rem; margin-top: 1rem; position: relative;">
-            <div class="navbar-icon"
-                style="margin: 0 auto 1rem; width: 3.5rem; height: 3.5rem; font-size: 1.75rem; box-shadow: 0 4px 20px rgba(56, 189, 248, 0.25);">
-                <i class="fas fa-snowflake"></i>
-            </div>
+            <img src="{{ asset('favicon_io/android-chrome-192x192.png') }}" alt="Arctic Vision"
+                style="margin: 0 auto 1rem; width: 4.5rem; height: 4.5rem; border-radius: 1rem; object-fit: contain; box-shadow: 0 4px 20px rgba(56, 189, 248, 0.25);" />
             <div
                 style="font-weight: 800; font-size: 1.25rem; background: linear-gradient(135deg, var(--av-primary-2), var(--av-primary)); -webkit-background-clip: text; color: transparent;">
                 Arctic Vision

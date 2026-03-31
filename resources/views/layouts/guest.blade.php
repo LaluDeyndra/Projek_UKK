@@ -7,6 +7,13 @@
 
         <title>{{ config('app.name', 'Arctic Vision') }}</title>
 
+        <!-- Favicon -->
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon_io/apple-touch-icon.png') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon_io/favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon_io/favicon-16x16.png') }}">
+        <link rel="manifest" href="{{ asset('favicon_io/site.webmanifest') }}">
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
@@ -32,7 +39,7 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
             <div>
                 <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+                    <img src="{{ asset('favicon_io/android-chrome-192x192.png') }}" alt="Arctic Vision" class="w-24 h-24 drop-shadow-lg rounded-xl">
                 </a>
             </div>
 

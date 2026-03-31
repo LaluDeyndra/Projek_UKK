@@ -207,7 +207,7 @@
                         </div>
                     </button>
                 </a>
-                <a href="#encyclopedia">
+                <a href="{{ route('encyclopedia') }}">
                     <button
                         class="relative group border-none bg-transparent p-0 outline-none cursor-pointer font-mono font-light uppercase text-base">
                         <span

@@ -1,424 +1,392 @@
 <x-public-layout>
-    <x-slot:title>Monitoring - Arctic Vision</x-slot:title>
+    <x-slot:title>Pusat Pantau Arktik - Arctic Vision</x-slot:title>
 
     <x-slot:styles>
         <style>
-            .av-status-dot {
+            /* Blob Animations */
+            @keyframes blob {
+                0% { transform: translate(0px, 0px) scale(1); }
+                33% { transform: translate(30px, -50px) scale(1.1); }
+                66% { transform: translate(-20px, 20px) scale(0.9); }
+                100% { transform: translate(0px, 0px) scale(1); }
+            }
+            .animate-blob {
+                animation: blob 10s infinite;
+            }
+            .animation-delay-2000 {
+                animation-delay: 2s;
+            }
+            .animation-delay-4000 {
+                animation-delay: 4s;
+            }
+
+            /* Glassmorphism Cards */
+            .glass-card {
+                background: rgba(255, 255, 255, 0.05);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+                border-radius: 1.5rem;
+                transition: transform 0.3s ease, border-color 0.3s ease;
+            }
+            .theme-dark .glass-card {
+                background: rgba(15, 23, 42, 0.4);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+            }
+            .glass-card:hover {
+                transform: translateY(-5px);
+                border-color: rgba(255, 255, 255, 0.3);
+            }
+            .theme-dark .glass-card:hover {
+                border-color: rgba(56, 189, 248, 0.3);
+            }
+
+            /* Status Dots */
+            .status-dot {
                 width: 10px;
                 height: 10px;
+                border-radius: 50%;
+                display: inline-block;
+            }
+            .status-dot.ok { background: #22c55e; box-shadow: 0 0 10px #22c55e, 0 0 20px #22c55e; }
+            .status-dot.warn { background: #facc15; box-shadow: 0 0 10px #facc15, 0 0 20px #facc15; }
+            .status-dot.bad { background: #ef4444; box-shadow: 0 0 10px #ef4444, 0 0 20px #ef4444; }
+
+            /* Trend Badges */
+            .trend-badge {
+                padding: 0.25rem 0.75rem;
                 border-radius: 9999px;
-                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.0);
+                font-size: 0.75rem;
+                font-weight: 700;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.25rem;
             }
-
-            .av-status-dot--ok {
-                background: #22c55e;
-                animation: avPulseGreen 1.8s ease-in-out infinite;
-            }
-
-            .av-status-dot--warn {
-                background: #f59e0b;
-                animation: avPulseAmber 2.2s ease-in-out infinite;
-            }
-
-            .av-status-dot--bad {
-                background: #ef4444;
-                animation: avPulseRed 2.0s ease-in-out infinite;
-            }
-
-            @keyframes avPulseGreen {
-                0% {
-                    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.35);
-                }
-
-                70% {
-                    box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
-                }
-
-                100% {
-                    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
-                }
-            }
-
-            @keyframes avPulseAmber {
-                0% {
-                    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.30);
-                }
-
-                70% {
-                    box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
-                }
-
-                100% {
-                    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
-                }
-            }
-
-            @keyframes avPulseRed {
-                0% {
-                    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.30);
-                }
-
-                70% {
-                    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
-                }
-
-                100% {
-                    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
-                }
-            }
+            .trend-up { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+            .trend-down { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+            .trend-stable { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
 
             canvas.av-chart {
                 width: 100%;
-                height: 280px;
+                height: 320px;
                 display: block;
             }
 
-            .av-card {
-                background: var(--av-surface);
-                border: 1px solid var(--av-border);
-                border-radius: 1.25rem;
+            /* Customizing table in glassmorphism */
+            .glass-table th {
+                background: rgba(255, 255, 255, 0.05);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             }
-
-            .av-muted {
-                color: var(--av-muted);
+            .glass-table td {
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             }
-
-            .theme-dark .av-card {
-                background: linear-gradient(-45deg, #0b1220, #000000, #0f172a, #0b1220);
-                background-size: 400% 400%;
-                animation: avCardGradient 15s ease infinite;
+            .glass-table tr:hover td {
+                background: rgba(255, 255, 255, 0.05);
             }
-
-            @keyframes avCardGradient {
-                0% { background-position: 0% 50%; }
-                50% { background-position: 100% 50%; }
-                100% { background-position: 0% 50%; }
-            }
+            .theme-dark .glass-table th { background: rgba(0, 0, 0, 0.2); border-color: rgba(255,255,255,0.05); }
+            .theme-dark .glass-table td { border-color: rgba(255,255,255,0.05); }
+            .theme-dark .glass-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
         </style>
     </x-slot:styles>
 
-    <div class="min-h-[calc(100vh-200px)]" style="background: var(--av-surface-2);">
-        <!-- Hero -->
-        <section class="pt-24">
+    <div class="pt-24 pb-12 min-h-screen relative overflow-hidden bg-slate-50 dark:bg-slate-950">
+        
+        <!-- Animated Background Gradients -->
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500 rounded-full mix-blend-screen filter blur-[120px] opacity-30 dark:opacity-20 animate-blob pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-400 rounded-full mix-blend-screen filter blur-[120px] opacity-30 dark:opacity-20 animate-blob animation-delay-2000 pointer-events-none"></div>
+        <div class="absolute top-1/2 left-1/4 w-[400px] h-[400px] bg-indigo-400 rounded-full mix-blend-screen filter blur-[120px] opacity-20 dark:opacity-10 animate-blob animation-delay-4000 pointer-events-none"></div>
+
+        <section class="relative z-10">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-md">
-                    <div class="relative p-8 sm:p-10">
-                        <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-                            <div class="max-w-2xl">
-                                <div
-                                    class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-slate-700">
-                                    <i class="fa-solid fa-snowflake text-blue-600"></i>
-                                    Monitoring Realtime • Arctic Vision
-                                </div>
-                                <h1 class="mt-4 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-                                    <span class="lang-id">Pantau suhu & kelembaban secara realtime</span>
-                                    <span class="lang-en">Monitor temperature & humidity in real-time</span>
-                                </h1>
-                                <p class="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">
-                                    <span class="lang-id">Angka dan grafik akan langsung terisi otomatis setiap 30 menit tanpa perlu reload.</span>
-                                    <span class="lang-en">Numbers and charts will automatically populate every 30 minutes without needing to reload.</span>
-                                </p>
-                            </div>
-
-                            <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-                                <div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                                    <div class="text-xs text-slate-600">
-                                        <span class="lang-id">Terakhir update</span>
-                                        <span class="lang-en">Last updated</span>
-                                    </div>
-                                    <div class="mt-1 text-sm font-semibold text-slate-900" id="last-updated">--</div>
-                                </div>
-                                <button id="btn-refresh"
-                                    class="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-500 active:scale-[0.99]">
-                                    <i class="fa-solid fa-rotate"></i>
-                                    Refresh
-                                </button>
-                            </div>
+                
+                <!-- Hero Section Premium -->
+                <div class="text-center mb-16 pt-8">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-700 dark:text-blue-400 text-xs sm:text-sm font-semibold tracking-wide uppercase mb-6 shadow-sm">
+                        <i class="fas fa-radar text-blue-600 dark:text-blue-400 animate-pulse"></i>
+                        <span class="lang-id">Pengamatan Atmosfer Real-Time</span>
+                        <span class="lang-en">Real-Time Atmospheric Observation</span>
+                    </div>
+                    
+                    <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-transparent bg-clip-text bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 drop-shadow-sm pb-2 leading-tight">
+                        <span class="lang-id">Pusat Pantau Ekologi</span>
+                        <span class="lang-en">Ecology Monitor Center</span>
+                    </h1>
+                    
+                    <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                        <span class="lang-id">Data dikalibrasi dan divalidasi langsung dari sensor lingkungan kami untuk memastikan Anda mendapatkan informasi iklim mikro terkini dengan filter tren prediktif matematis.</span>
+                        <span class="lang-en">Data is calibrated and directly validated from our environmental sensors to ensure you receive the latest micro-climate information with mathematical predictive trend filters.</span>
+                    </p>
+                    
+                    <div class="mt-8 flex items-center justify-center gap-4 text-sm font-medium text-slate-500 dark:text-slate-400">
+                        <div class="flex items-center gap-2 bg-white/50 dark:bg-slate-900/50 px-4 py-2 rounded-full border border-slate-200 dark:border-slate-800">
+                            <span class="status-dot ok" id="dot-sensor"></span>
+                            <span id="sensor-status-text">
+                                <span class="lang-id">Sedang sinkronisasi...</span>
+                                <span class="lang-en">Synchronizing...</span>
+                            </span>
                         </div>
-
-                        <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                            <!-- Temperature card -->
-                            <div class="av-card p-6 transition hover:shadow-md">
-                                <div class="flex items-start justify-between">
-                                    <div>
-                                        <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                            <span class="lang-id">Suhu Udara</span>
-                                            <span class="lang-en">Air Temp</span>
-                                        </div>
-                                        <div class="mt-2 flex items-end gap-2">
-                                            <div class="text-4xl font-semibold text-slate-900 tabular-nums"
-                                                id="temperature-value">--</div>
-                                            <div class="pb-1 text-sm text-slate-600">°C</div>
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-sm">
-                                        <i class="fa-solid fa-temperature-three-quarters"></i>
-                                    </div>
-                                </div>
-                                <div class="mt-4 flex items-center gap-2 text-sm text-slate-600">
-                                    <span id="dot-sensor" class="av-status-dot av-status-dot--warn"></span>
-                                    <span id="sensor-status-text">
-                                        <span class="lang-id">Menunggu data…</span>
-                                        <span class="lang-en">Waiting for data...</span>
-                                    </span>
-                                </div>
-                            </div>
-
-                            <!-- Humidity card -->
-                            <div class="av-card p-6 transition hover:shadow-md">
-                                <div class="flex items-start justify-between">
-                                    <div>
-                                        <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                            <span class="lang-id">Kelembaban</span>
-                                            <span class="lang-en">Humidity</span>
-                                        </div>
-                                        <div class="mt-2 flex items-end gap-2">
-                                            <div class="text-4xl font-semibold text-slate-900 tabular-nums"
-                                                id="humidity-value">--</div>
-                                            <div class="pb-1 text-sm text-slate-600">%</div>
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-600 text-white shadow-sm">
-                                        <i class="fa-solid fa-droplet"></i>
-                                    </div>
-                                </div>
-                                <div class="mt-4 text-sm text-slate-600" id="humidity-hint">
-                                    <span class="lang-id">Tip: ideal indoor 40–60% (sekadar referensi).</span>
-                                    <span class="lang-en">Tip: ideal indoor 40–60% (reference only).</span>
-                                </div>
-                            </div>
-
-                            <!-- System card -->
-                            <div class="av-card p-6 transition hover:shadow-md">
-                                <div class="flex items-start justify-between">
-                                    <div>
-                                        <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                            <span class="lang-id">Koneksi Perangkat</span>
-                                            <span class="lang-en">Device Connection</span>
-                                        </div>
-                                        <div class="mt-2 flex items-end gap-2">
-                                            <div class="text-4xl font-semibold text-slate-900 tabular-nums"
-                                                id="system-health">--</div>
-                                            <div class="pb-1 text-sm text-slate-600">%</div>
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-600 text-white shadow-sm">
-                                        <i class="fa-solid fa-heart-pulse"></i>
-                                    </div>
-                                </div>
-                                <div class="mt-4 flex items-center justify-between text-sm text-slate-600">
-                                    <span>Status</span>
-                                    <span class="font-semibold text-slate-900" id="system-text">--</span>
-                                </div>
-                            </div>
-                        </div>
+                        <button id="btn-refresh" class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/50 dark:bg-slate-900/50 hover:bg-blue-50 dark:hover:bg-blue-900/30 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 transition-all hover:rotate-180" title="Refresh Manual">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- Content -->
-        <section class="py-10">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <!-- Bento Grid Metrics -->
+                <div class="grid gap-6 md:grid-cols-3 mb-12">
+                    
+                    <!-- Temp Card -->
+                    <div class="glass-card p-6 flex flex-col justify-between">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-400 to-red-500 text-white flex items-center justify-center text-xl shadow-lg shadow-red-500/20">
+                                <i class="fas fa-thermometer-half"></i>
+                            </div>
+                            <div class="trend-badge trend-stable" id="temp-trend">
+                                <i class="fas fa-minus"></i> Stabil
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                <span class="lang-id">Suhu Atmosfer</span>
+                                <span class="lang-en">Atmospheric Temp</span>
+                            </h3>
+                            <div class="flex items-baseline mt-2 gap-2">
+                                <span class="text-5xl font-black text-slate-800 dark:text-white tabular-nums tracking-tighter" id="temperature-value">--</span>
+                                <span class="text-xl font-bold text-slate-500 dark:text-slate-400">°C</span>
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-3" id="temp-insight">
+                                Mengumpulkan data observasi...
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Humidity Card -->
+                    <div class="glass-card p-6 flex flex-col justify-between">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 text-white flex items-center justify-center text-xl shadow-lg shadow-blue-500/20">
+                                <i class="fas fa-wind"></i>
+                            </div>
+                            <div class="trend-badge trend-stable" id="hum-trend">
+                                <i class="fas fa-minus"></i> Stabil
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                <span class="lang-id">Densitas Kelembaban</span>
+                                <span class="lang-en">Humidity Density</span>
+                            </h3>
+                            <div class="flex items-baseline mt-2 gap-2">
+                                <span class="text-5xl font-black text-slate-800 dark:text-white tabular-nums tracking-tighter" id="humidity-value">--</span>
+                                <span class="text-xl font-bold text-slate-500 dark:text-slate-400">%</span>
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-3" id="hum-insight">
+                                Mengumpulkan data observasi...
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- System Info Card -->
+                    <div class="glass-card p-6 flex flex-col justify-between">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-400 to-purple-600 text-white flex items-center justify-center text-xl shadow-lg shadow-purple-500/20">
+                                <i class="fas fa-satellite-dish"></i>
+                            </div>
+                            <div class="text-xs font-semibold text-slate-500 dark:text-slate-400 bg-black/5 dark:bg-white/10 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700">
+                                <i class="fas fa-clock mr-1"></i> <span id="last-updated">--:--</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                <span class="lang-id">Integritas Transmisi</span>
+                                <span class="lang-en">Transmission Integrity</span>
+                            </h3>
+                            <div class="flex items-baseline mt-2 gap-2">
+                                <span class="text-5xl font-black text-slate-800 dark:text-white tabular-nums tracking-tighter" id="system-health">--</span>
+                                <span class="text-xl font-bold text-slate-500 dark:text-slate-400">%</span>
+                            </div>
+                            <p class="text-xs font-medium text-slate-600 dark:text-slate-300 mt-3" id="system-text">
+                                Menunggu status uplink...
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Bottom Section: Chart & Table -->
                 <div class="grid gap-6 lg:grid-cols-3">
-                    <!-- Chart -->
+                    
+                    <!-- Advanced Analytics Chart -->
                     <div class="lg:col-span-2">
-                        <div class="av-card p-6">
-                            <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                        <div class="glass-card p-6 h-full">
+                            <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-6">
                                 <div>
-                                    <div class="text-sm font-semibold text-slate-900">
-                                        <span class="lang-id">Grafik 24 data terakhir</span>
-                                        <span class="lang-en">Last 24 data records chart</span>
-                                    </div>
-                                    <div class="text-xs text-slate-500">
-                                        <span class="lang-id">Garis biru: suhu &bull; garis cyan: kelembaban</span>
-                                        <span class="lang-en">Blue line: temp &bull; cyan line: humidity</span>
-                                    </div>
+                                    <h2 class="text-xl font-bold text-slate-800 dark:text-white">
+                                        <span class="lang-id">Proyeksi Tren Matematis (30 Menit)</span>
+                                        <span class="lang-en">Mathematical Trend Projection (30 Mins)</span>
+                                    </h2>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                                        <span class="lang-id">Grafik merangkum data interval historis untuk memberikan visual tren iklim secara halus.</span>
+                                        <span class="lang-en">Chart summarizes historical interval data to provide smooth climatic trend visuals.</span>
+                                    </p>
+                                </div>
+                                <div class="mt-4 sm:mt-0 flex gap-3 text-xs font-bold uppercase tracking-wider">
+                                    <span class="flex items-center gap-1 text-red-500 dark:text-red-400"><span class="w-3 h-3 rounded-full bg-red-500 dark:bg-red-400 block"></span> Suhu</span>
+                                    <span class="flex items-center gap-1 text-cyan-500 dark:text-cyan-400"><span class="w-3 h-3 rounded-full bg-cyan-500 dark:bg-cyan-400 block"></span> Lembab</span>
                                 </div>
                             </div>
-                            <div class="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-3">
-                                <canvas id="historyChart" class="av-chart"></canvas>
-                            </div>
-                            <div class="mt-4 grid gap-3 sm:grid-cols-4">
-                                <div class="rounded-2xl border border-slate-200 bg-white p-4">
-                                    <div class="text-xs text-slate-500">
-                                        <span class="lang-id">Suhu maskimal</span>
-                                        <span class="lang-en">Max temp</span>
-                                    </div>
-                                    <div class="mt-1 text-lg font-semibold text-slate-900 tabular-nums" id="temp-max">
-                                        --</div>
-                                </div>
-                                <div class="rounded-2xl border border-slate-200 bg-white p-4">
-                                    <div class="text-xs text-slate-500">
-                                        <span class="lang-id">Suhu minimal</span>
-                                        <span class="lang-en">Min temp</span>
-                                    </div>
-                                    <div class="mt-1 text-lg font-semibold text-slate-900 tabular-nums" id="temp-min">
-                                        --</div>
-                                </div>
-                                <div class="rounded-2xl border border-slate-200 bg-white p-4">
-                                    <div class="text-xs text-slate-500">
-                                        <span class="lang-id">Rata-rata kelembaban</span>
-                                        <span class="lang-en">Avg humidity</span>
-                                    </div>
-                                    <div class="mt-1 text-lg font-semibold text-slate-900 tabular-nums"
-                                        id="humidity-avg">--</div>
-                                </div>
-                                <div class="rounded-2xl border border-slate-200 bg-white p-4">
-                                    <div class="text-xs text-slate-500">
-                                        <span class="lang-id">Uptime (perkiraan)</span>
-                                        <span class="lang-en">Estimated Uptime</span>
-                                    </div>
-                                    <div class="mt-1 text-lg font-semibold text-slate-900 tabular-nums"
-                                        id="system-uptime">--</div>
-                                </div>
+                            
+                            <div class="relative w-full rounded-2xl overflow-hidden bg-white/30 dark:bg-black/20 border border-slate-200/50 dark:border-slate-800/50 p-2">
+                                <canvas id="historyChart" class="av-chart" style="max-width: 100%;"></canvas>
                             </div>
 
-                            <div class="mt-4 hidden rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900"
-                                id="banner-empty">
-                                <span class="lang-id">Belum ada data history. Nyalakan alat, lalu tunggu beberapa kali pengiriman data.</span>
-                                <span class="lang-en">No historical data available. Turn on the device and wait for a few data transmissions.</span>
-                            </div>
-                            <div class="mt-4 hidden rounded-2xl border border-rose-300 bg-rose-50 px-4 py-3 text-sm text-rose-900"
-                                id="banner-error">
-                                <span class="lang-id">Gagal mengambil data dari API. Pastikan server Laravel menyala dan URL sesuai.</span>
-                                <span class="lang-en">Failed to fetch API data. Please ensure the Laravel server is running and the URL is correct.</span>
+                            <!-- Small Stats Row -->
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                                <div class="bg-white/40 dark:bg-slate-900/40 p-4 rounded-xl border border-white/50 dark:border-slate-800 text-center">
+                                    <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                                        <span class="lang-id">Suhu Puncak</span>
+                                        <span class="lang-en">Peak Temp</span>
+                                    </div>
+                                    <div class="text-lg font-black text-slate-800 dark:text-slate-200 mt-1" id="temp-max">--</div>
+                                </div>
+                                <div class="bg-white/40 dark:bg-slate-900/40 p-4 rounded-xl border border-white/50 dark:border-slate-800 text-center">
+                                    <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                                        <span class="lang-id">Suhu Rendah</span>
+                                        <span class="lang-en">Low Temp</span>
+                                    </div>
+                                    <div class="text-lg font-black text-slate-800 dark:text-slate-200 mt-1" id="temp-min">--</div>
+                                </div>
+                                <div class="bg-white/40 dark:bg-slate-900/40 p-4 rounded-xl border border-white/50 dark:border-slate-800 text-center">
+                                    <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                                        <span class="lang-id">Rata² Kelembaban</span>
+                                        <span class="lang-en">Avg Humidity</span>
+                                    </div>
+                                    <div class="text-lg font-black text-slate-800 dark:text-slate-200 mt-1" id="humidity-avg">--</div>
+                                </div>
+                                <div class="bg-white/40 dark:bg-slate-900/40 p-4 rounded-xl border border-white/50 dark:border-slate-800 text-center">
+                                    <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                                        <span class="lang-id">Status Uptime</span>
+                                        <span class="lang-en">Est Uptime</span>
+                                    </div>
+                                    <div class="text-lg font-black text-slate-800 dark:text-slate-200 mt-1" id="system-uptime">--</div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Table -->
-                    <div class="lg:col-span-1">
-                        <div class="av-card p-6">
-                            <div class="flex items-center justify-between">
-                                <div class="text-sm font-semibold text-slate-900">
-                                    <span class="lang-id">Riwayat Terbaru</span>
-                                    <span class="lang-en">Recent History</span>
-                                </div>
-                                <div class="text-xs text-slate-500" id="history-count">0 data</div>
+                    <!-- History Log -->
+                    <div class="lg:col-span-1 min-w-0 w-full">
+                        <div class="glass-card p-4 sm:p-6 h-full flex flex-col w-full overflow-hidden">
+                            <div class="flex items-center justify-between mb-6">
+                                <h2 class="text-lg font-bold text-slate-800 dark:text-white">
+                                    <span class="lang-id">Log Transmisi</span>
+                                    <span class="lang-en">Transmission Log</span>
+                                </h2>
+                                <span class="text-xs bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-1 rounded-md font-mono" id="history-count">0</span>
                             </div>
-                            <div class="mt-4 overflow-hidden rounded-2xl border border-slate-200">
-                                <table class="w-full text-left text-sm">
-                                    <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-600">
+                            
+                            <div class="flex-grow w-full overflow-x-auto overflow-y-auto pr-2 custom-scrollbar">
+                                <table class="w-full text-left text-sm glass-table whitespace-nowrap">
+                                    <thead class="text-xs uppercase tracking-wider text-slate-500 sticky top-0 backdrop-blur-md z-10">
                                         <tr>
-                                            <th class="px-4 py-3">
-                                                <span class="lang-id">Waktu</span>
-                                                <span class="lang-en">Time</span>
-                                            </th>
-                                            <th class="px-4 py-3">
-                                                <span class="lang-id">Suhu</span>
-                                                <span class="lang-en">Temp</span>
-                                            </th>
-                                            <th class="px-4 py-3">Hum</th>
+                                            <th class="px-4 py-3 font-semibold rounded-tl-lg">Waktu</th>
+                                            <th class="px-4 py-3 font-semibold text-right">Suhu</th>
+                                            <th class="px-4 py-3 font-semibold text-right rounded-tr-lg">Hum</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="divide-y divide-slate-200 bg-white" id="history-rows">
+                                    <tbody id="history-rows" class="text-slate-700 dark:text-slate-300 bg-white/20 dark:bg-slate-900/20">
                                         <tr>
-                                            <td class="px-4 py-3 text-slate-500" colspan="3">
-                                                <span class="lang-id">Menunggu data…</span>
-                                                <span class="lang-en">Waiting for data...</span>
-                                            </td>
+                                            <td class="px-4 py-4 text-center text-slate-500 italic" colspan="3">Meninjau arsip data...</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-
-                            <div class="mt-4 text-xs text-slate-500">
-                                <span class="lang-id">Catatan: tampilan ini akan semakin terisi setelah perangkat mulai mengirim data dan akan di saring setiap 30 menit.</span>
-                                <span class="lang-en">Note: this view will populate as the device sends periodic data and will be filtered every 30 minutes.</span>
+                            
+                            <div class="mt-4 text-[10px] text-slate-500 text-center uppercase tracking-widest border-t border-slate-200/50 dark:border-slate-800 pt-4">
+                                <span class="lang-id">Interval Penyegaran Otomatis: 30 Menit</span>
+                                <span class="lang-en">Auto-Refresh Interval: 30 Mins</span>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>
     </div>
 
+    <!-- Chart.js includes -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
         const el = (id) => document.getElementById(id);
+        const state = { latest: null, history: [], lastOkAt: null };
 
-        const state = {
-            latest: null,
-            history: [],
-            lastOkAt: null,
-        };
-
-        function clamp(n, min, max) {
-            return Math.min(max, Math.max(min, n));
-        }
+        let chartInstance = null;
 
         function formatTime(ts) {
+            if (!ts) return '--:--';
+            const d = new Date(ts);
+            if (Number.isNaN(d.getTime())) return '--:--';
+            return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        
+        function formatFullTime(ts) {
             if (!ts) return '--';
             const d = new Date(ts);
-            if (Number.isNaN(d.getTime())) return '--';
-            return d.toLocaleString(undefined, {
-                year: 'numeric',
-                month: 'short',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-            });
+            return d.toLocaleString([], { month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' });
         }
 
-        function setDotStatus(dotEl, level) {
-            dotEl.classList.remove('av-status-dot--ok', 'av-status-dot--warn', 'av-status-dot--bad');
-            if (level === 'ok') dotEl.classList.add('av-status-dot--ok');
-            else if (level === 'bad') dotEl.classList.add('av-status-dot--bad');
-            else dotEl.classList.add('av-status-dot--warn');
+        // --- TREND ANALYSIS (MATHEMATICAL) ---
+        function calculateTrend(type, current, dataArray) {
+            if(dataArray.length < 3) return { dir: 'stable', text: 'Stabil', icon: 'fa-minus' };
+            
+            // Mengambil 5 data terakhir untuk moving average pendek
+            let recentData = dataArray.slice(-5);
+            let sum = 0;
+            recentData.forEach(r => sum += Number(r[type]));
+            let avg = sum / recentData.length;
+            
+            let diff = current - avg;
+            
+            if (diff > 0.5) {
+                return { dir: 'up', text: 'Naik', icon: 'fa-arrow-trend-up' };
+            } else if (diff < -0.5) {
+                return { dir: 'down', text: 'Turun', icon: 'fa-arrow-trend-down' };
+            } else {
+                return { dir: 'stable', text: 'Stabil', icon: 'fa-minus' };
+            }
+        }
+
+        function updateTrendUI(elementId, trendData) {
+            const badge = el(elementId);
+            if(!badge) return;
+            badge.className = `trend-badge trend-${trendData.dir}`;
+            badge.innerHTML = `<i class="fas ${trendData.icon}"></i> ${trendData.text}`;
+        }
+
+        function getInsightText(type, val, trendData) {
+            if (type === 'temp') {
+                if (val > 30) return '<span class="text-red-500 font-medium">Suhu Panas: Sistem Awas Terpicu</span>';
+                if (val < 15) return '<span class="text-blue-500 font-medium">Suhu Dingin Ekstrem: Optimal</span>';
+                if (trendData.dir === 'up') return 'Indikasi pemanasan bertahap terpantau.';
+                if (trendData.dir === 'down') return 'Pendinginan atmosfer sedang berlangsung.';
+                return 'Kondisi iklim makro stabil dan ideal.';
+            } else {
+                if (val > 70) return 'Udara sangat lembab, potensi presipitasi tinggi.';
+                if (val < 30) return 'Udara kering, kelembaban di bawah rata-rata.';
+                return 'Kerapatan uap air dalam batas normal.';
+            }
         }
 
         function computeHealth(secondsSinceUpdate) {
-            // Updated thresholds for 30-minute polling interval
-            if (secondsSinceUpdate <= 2100) return { // 35 minutes grace period
-                pct: 100,
-                labelId: 'Baik',
-                labelEn: 'Good',
-                level: 'ok'
-            };
-            if (secondsSinceUpdate <= 3600) return { // 1 hour
-                pct: 75,
-                labelId: 'Stabil',
-                labelEn: 'Stable',
-                level: 'ok'
-            };
-            if (secondsSinceUpdate <= 5400) return { // 1.5 hours
-                pct: 45,
-                labelId: 'Terlambat',
-                labelEn: 'Delayed',
-                level: 'warn'
-            };
-            return {
-                pct: 10,
-                labelId: 'Offline',
-                labelEn: 'Offline',
-                level: 'bad'
-            };
+            // Heartbeat system: Sensor should send every few mins, but we accept 30m gracefully.
+            if (secondsSinceUpdate <= 300) return { pct: 100, labelId: 'Koneksi Sempurna', level: 'ok' }; // 5 mins
+            if (secondsSinceUpdate <= 1800) return { pct: 85, labelId: 'Sinkronisasi Jeda', level: 'ok' }; // 30 mins
+            if (secondsSinceUpdate <= 3600) return { pct: 45, labelId: 'Transmisi Terhambat', level: 'warn' }; // 1 hr
+            return { pct: 0, labelId: 'Sinyal Terputus', level: 'bad' };
         }
 
-        function formatRelativeTimeBilingual(seconds) {
-            if (seconds <= 60) return {
-                id: 'Online &bull; realtime',
-                en: 'Online &bull; realtime'
-            };
-            const m = Math.floor(seconds / 60);
-            if (m < 60) return {
-                id: `Update terakhir ${m} menit lalu`,
-                en: `Last updated ${m} mins ago`
-            };
-            const h = Math.floor(m / 60);
-            if (h < 24) return {
-                id: `Update terakhir ${h} jam lalu`,
-                en: `Last updated ${h} hours ago`
-            };
-            const d = Math.floor(h / 24);
-            return {
-                id: `Update terakhir ${d} hari lalu`,
-                en: `Last updated ${d} days ago`
-            };
+        function setDotStatus(dotEl, level) {
+            dotEl.className = `status-dot ${level}`;
         }
 
         function renderLatest() {
@@ -431,10 +399,9 @@
                 el('temperature-value').textContent = '--';
                 el('humidity-value').textContent = '--';
                 el('system-health').textContent = '--';
-                el('system-text').innerHTML = '--';
-                lastUpdatedEl.textContent = '--';
-                setDotStatus(dot, 'warn');
-                statusText.innerHTML = '<span class="lang-id">Menunggu data…</span><span class="lang-en">Waiting for data...</span>';
+                el('system-text').textContent = 'Kehilangan kontak server.';
+                setDotStatus(dot, 'bad');
+                statusText.innerHTML = '<span class="lang-id">Kehilangan sinyal...</span><span class="lang-en">Signal lost...</span>';
                 return;
             }
 
@@ -443,31 +410,38 @@
             const seconds = Number.isNaN(updatedAt) ? 9999 : (now - updatedAt) / 1000;
             const health = computeHealth(seconds);
 
-            el('temperature-value').textContent = Number(latest.temperature).toFixed(1);
-            el('humidity-value').textContent = Number(latest.humidity).toFixed(0);
+            let currentTemp = Number(latest.temperature);
+            let currentHum = Number(latest.humidity);
+
+            el('temperature-value').textContent = currentTemp.toFixed(1);
+            el('humidity-value').textContent = currentHum.toFixed(0);
             el('system-health').textContent = String(health.pct);
-            el('system-text').innerHTML = `<span class="lang-id">${health.labelId}</span><span class="lang-en">${health.labelEn}</span>`;
+            el('system-text').textContent = health.labelId;
             lastUpdatedEl.textContent = formatTime(latest.timestamp);
 
             setDotStatus(dot, health.level);
-            const relTime = formatRelativeTimeBilingual(seconds);
-            statusText.innerHTML = `<span class="lang-id">${relTime.id}</span><span class="lang-en">${relTime.en}</span>`;
+            
+            // Relative time purely for guest UI
+            let m = Math.floor(seconds / 60);
+            if(m < 1) statusText.innerHTML = 'Data Real-Time saat ini';
+            else statusText.innerHTML = `Disinkronkan ${m} menit lalu`;
+
+            // Trend analysis
+            let tempTrend = calculateTrend('temperature', currentTemp, state.history);
+            let humTrend = calculateTrend('humidity', currentHum, state.history);
+            
+            updateTrendUI('temp-trend', tempTrend);
+            updateTrendUI('hum-trend', humTrend);
+            
+            el('temp-insight').innerHTML = getInsightText('temp', currentTemp, tempTrend);
+            el('hum-insight').innerHTML = getInsightText('hum', currentHum, humTrend);
         }
 
         function renderStats() {
             const data = state.history;
-            if (!data.length) {
-                el('temp-max').textContent = '--';
-                el('temp-min').textContent = '--';
-                el('humidity-avg').textContent = '--';
-                el('system-uptime').textContent = '--';
-                return;
-            }
+            if (!data.length) return;
 
-            let tMax = -Infinity;
-            let tMin = Infinity;
-            let hSum = 0;
-            let hCount = 0;
+            let tMax = -Infinity, tMin = Infinity, hSum = 0, hCount = 0;
 
             for (const row of data) {
                 const t = Number(row.temperature);
@@ -485,23 +459,16 @@
             el('temp-max').textContent = Number.isFinite(tMax) ? `${tMax.toFixed(1)}°C` : '--';
             el('temp-min').textContent = Number.isFinite(tMin) ? `${tMin.toFixed(1)}°C` : '--';
             el('humidity-avg').textContent = hCount ? `${(hSum / hCount).toFixed(1)}%` : '--';
-            el('system-uptime').textContent = `${clamp((data.length / 100) * 100, 0, 100).toFixed(0)}%`;
+            el('system-uptime').textContent = `${Math.min((data.length / 50) * 100, 100).toFixed(0)}%`;
         }
 
         function renderHistoryTable() {
             const tbody = el('history-rows');
-            const rows = state.history.slice(-10).reverse();
-            el('history-count').textContent = `${state.history.length} data`;
+            const rows = state.history.slice(-20).reverse(); // show last 20 for log
+            el('history-count').innerHTML = `<span class="lang-id">${state.history.length} data</span><span class="lang-en">${state.history.length} rec</span>`;
 
             if (!rows.length) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td class="px-4 py-3 text-slate-500" colspan="3">
-                            <span class="lang-id">Belum ada data.</span>
-                            <span class="lang-en">No data yet.</span>
-                        </td>
-                    </tr>
-                `;
+                tbody.innerHTML = `<tr><td class="px-4 py-4 text-center text-slate-500 italic" colspan="3">Tidak ada data transmisi.</td></tr>`;
                 return;
             }
 
@@ -509,162 +476,145 @@
                 const t = Number(r.temperature);
                 const h = Number(r.humidity);
                 return `
-                    <tr class="text-slate-900">
-                        <td class="px-4 py-3 text-slate-500">${formatTime(r.timestamp)}</td>
-                        <td class="px-4 py-3 font-semibold tabular-nums">${Number.isNaN(t) ? '--' : t.toFixed(1)}°C</td>
-                        <td class="px-4 py-3 font-semibold tabular-nums">${Number.isNaN(h) ? '--' : h.toFixed(0)}%</td>
+                    <tr class="transition-colors">
+                        <td class="px-4 py-3 font-mono text-[11px] whitespace-nowrap opacity-70">${formatFullTime(r.timestamp)}</td>
+                        <td class="px-4 py-3 font-bold tabular-nums text-right text-red-500/80 dark:text-red-400/80">${Number.isNaN(t) ? '--' : t.toFixed(1)}°C</td>
+                        <td class="px-4 py-3 font-bold tabular-nums text-right text-cyan-600/80 dark:text-cyan-400/80">${Number.isNaN(h) ? '--' : h.toFixed(0)}%</td>
                     </tr>
                 `;
             }).join('');
         }
 
         function drawChart() {
-            const canvas = el('historyChart');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            if (!ctx) return;
+            const ctx = document.getElementById('historyChart').getContext('2d');
+            const data = state.history.slice(-30); // 30 points
 
-            const parent = canvas.parentElement;
-            const w = parent ? parent.clientWidth : 800;
-            const h = 280;
-            canvas.width = Math.max(320, w);
-            canvas.height = h;
-
-            const data = state.history.slice(-24);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const labels = data.map(d => formatTime(d.timestamp));
+            const temps = data.map(d => Number(d.temperature));
+            const hums = data.map(d => Number(d.humidity));
 
             const isDark = document.documentElement.classList.contains('theme-dark');
+            const gridColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
+            const textColor = isDark ? '#94a3b8' : '#64748b';
 
-            // Background grid
-            ctx.globalAlpha = 1;
-            ctx.fillStyle = isDark ? 'rgba(2, 6, 23, 0.35)' : 'rgba(248, 250, 252, 1)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(15, 23, 42, 0.08)';
-            ctx.lineWidth = 1;
-            for (let i = 1; i <= 4; i++) {
-                const y = (canvas.height / 5) * i;
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(canvas.width, y);
-                ctx.stroke();
+            if (chartInstance) {
+                chartInstance.destroy();
             }
 
-            if (!data.length) return;
-
-            const temps = data.map(d => Number(d.temperature)).filter(n => !Number.isNaN(n));
-            const hums = data.map(d => Number(d.humidity)).filter(n => !Number.isNaN(n));
-            const tMin = temps.length ? Math.min(...temps) : 0;
-            const tMax = temps.length ? Math.max(...temps) : 1;
-            const hMin = hums.length ? Math.min(...hums) : 0;
-            const hMax = hums.length ? Math.max(...hums) : 1;
-
-            const pad = 18;
-            const xFor = (i) => pad + (i * (canvas.width - pad * 2)) / Math.max(1, data.length - 1);
-            const yFor = (val, min, max) => {
-                const denom = (max - min) || 1;
-                const t = (val - min) / denom;
-                return (canvas.height - pad) - t * (canvas.height - pad * 2);
-            };
-
-            // Temp line
-            ctx.lineWidth = 2.5;
-            ctx.strokeStyle = '#60a5fa'; // blue-400
-            ctx.beginPath();
-            data.forEach((d, i) => {
-                const v = Number(d.temperature);
-                if (Number.isNaN(v)) return;
-                const x = xFor(i);
-                const y = yFor(v, tMin, tMax);
-                if (i === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
+            // Using Chart.js for beautiful smooth curves
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Temperatur (°C)',
+                            data: temps,
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.4, // Smooth mathematical curve
+                            fill: true,
+                            pointRadius: 0,
+                            pointHitRadius: 10,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Kelembaban (%)',
+                            data: hums,
+                            borderColor: '#06b6d4',
+                            backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 0,
+                            pointHitRadius: 10,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: { display: false }, // Custom legend used in HTML
+                        tooltip: {
+                            backgroundColor: isDark ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                            titleColor: isDark ? '#fff' : '#000',
+                            bodyColor: isDark ? '#cbd5e1' : '#475569',
+                            borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                            borderWidth: 1,
+                            padding: 12,
+                            boxPadding: 4,
+                            usePointStyle: true
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: textColor, maxTicksLimit: 6 }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            grid: { color: gridColor },
+                            ticks: { color: textColor }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: { drawOnChartArea: false },
+                            ticks: { color: textColor }
+                        }
+                    }
+                }
             });
-            ctx.stroke();
-
-            // Humidity line
-            ctx.lineWidth = 2.5;
-            ctx.strokeStyle = '#22d3ee'; // cyan-400
-            ctx.beginPath();
-            data.forEach((d, i) => {
-                const v = Number(d.humidity);
-                if (Number.isNaN(v)) return;
-                const x = xFor(i);
-                const y = yFor(v, hMin, hMax);
-                if (i === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
-            });
-            ctx.stroke();
-        }
-
-        async function safeJson(res) {
-            const text = await res.text();
-            try {
-                return JSON.parse(text);
-            } catch {
-                return {
-                    status: 'error',
-                    message: 'Invalid JSON response',
-                    raw: text
-                };
-            }
         }
 
         async function fetchLatest() {
-            const res = await fetch('/api/sensor/latest', {
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
-            const json = await safeJson(res);
+            const res = await fetch('/api/sensor/latest', { headers: { 'Accept': 'application/json' }});
+            const json = await res.json();
             if (!res.ok || json.status !== 'success') return null;
             return json.data ?? null;
         }
 
         async function fetchHistory() {
-            const res = await fetch('/api/sensor/history?limit=100', {
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
-            const json = await safeJson(res);
+            const res = await fetch('/api/sensor/history?limit=100', { headers: { 'Accept': 'application/json' }});
+            const json = await res.json();
             if (!res.ok || json.status !== 'success') return [];
             return Array.isArray(json.data) ? json.data : [];
         }
 
-        function setErrorBanner(show) {
-            el('banner-error').classList.toggle('hidden', !show);
-        }
-
-        function setEmptyBanner(show) {
-            el('banner-empty').classList.toggle('hidden', !show);
-        }
-
         async function refreshAll() {
+            const btn = el('btn-refresh');
+            if(btn) btn.classList.add('animate-spin');
+            
             try {
-                setErrorBanner(false);
                 const [latest, history] = await Promise.all([fetchLatest(), fetchHistory()]);
                 state.latest = latest;
                 state.history = history;
                 state.lastOkAt = Date.now();
 
-                setEmptyBanner(!history.length);
                 renderLatest();
                 renderStats();
                 renderHistoryTable();
                 drawChart();
             } catch (e) {
-                console.error(e);
-                setErrorBanner(true);
-                renderLatest();
+                console.error("API Error: ", e);
+            } finally {
+                if(btn) setTimeout(() => btn.classList.remove('animate-spin'), 500);
             }
         }
 
-        const btn = el('btn-refresh');
-        btn?.addEventListener('click', () => refreshAll());
-        window.addEventListener('resize', () => drawChart());
-
+        el('btn-refresh')?.addEventListener('click', () => refreshAll());
         refreshAll();
-        // Set polling interval to 30 minutes (30 * 60 * 1000)
-        setInterval(refreshAll, 1800000);
+        // Polling still standard but math allows us to evaluate "trend" over intervals
+        setInterval(refreshAll, 60000); // 1 minute polling to feel "live", though sensor can be any interval
     </script>
 </x-public-layout>

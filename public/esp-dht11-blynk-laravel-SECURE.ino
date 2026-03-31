@@ -15,14 +15,18 @@ char ssid[] = "ZTE_2.lalu_2.4G";       // ganti dengan nama WiFi kamu
 char pass[] = "90909090";              // ganti dengan password WiFi kamu
 
 // ===== KONFIGURASI LARAVEL API (SECURE) =====
-const char* server = "www.arvi.life";  // Ganti dengan domain/IP utama Anda
-const int port = 443;                  // Port HTTPS
+const char* server = "www.arvi.life";  // [Penting] Ganti dengan Domain Ngrok atau IPv4 Laptop Anda
+const int port = 443;               // [Penting] 80 untuk HTTP, 443 untuk HTTPS (Pakai 443 jika Ngrok)
 String apiEndpoint = "/api/sensor/data";
-String apiKey = "arctic_vision_sensor_key_9a7f2b8e1c4d5f6e_secure_token";  // SAMA dengan .env SENSOR_API_KEY
+String apiKey = "cee46326-c1c0-437a-acb3-3073933e868f";  // SAMA PERSIS dengan .env SENSOR_API_KEY
 
 DHT dht(DHTPIN, DHTTYPE);
 BlynkTimer timer;
-WiFiClientSecure wifiClient; // WAJIB PAKAI SECURE UNTUK PORT 443 PADA ESP8266
+
+// Jika Anda memakai IP Lokal (192.168.x.x / Port 80), gunakan WiFiClient biasa:
+// WiFiClient wifiClient; 
+// Tapi jika server memakai HTTPS/Ngrok (Port 443), gunakan WiFiClientSecure:
+WiFiClientSecure wifiClient;
 
 void kirimData() {
   float kelembapan = dht.readHumidity();
@@ -117,8 +121,8 @@ void setup() {
   // Mengabaikan pengecekan SSL Certificate karena HTTPS biasa (Ngrok/Cloudflare) menggunakan sertifikat dinamis
   wifiClient.setInsecure();
 
-  // Kirim data ke Blynk + Laravel setiap 2 detik
-  timer.setInterval(2000L, kirimData);
+  // Kirim data ke Blynk + Laravel setiap 60 detik (1 Menit) untuk "Real-Time Heartbeat"
+  timer.setInterval(60000L, kirimData);
 
   Serial.println("✓ Setup complete!");
 }
