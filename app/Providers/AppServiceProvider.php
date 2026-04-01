@@ -24,5 +24,16 @@ class AppServiceProvider extends ServiceProvider
         if (env('APP_ENV') === 'production' || request()->server('HTTP_X_FORWARDED_PROTO') == 'https') {
             URL::forceScheme('https');
         }
+
+        // Redirect to APP_URL host to definitively prevent any CORS issue (forces WWW or non-WWW)
+        if (app()->environment('production') && !app()->runningInConsole()) {
+            $appHost = parse_url(config('app.url'), PHP_URL_HOST);
+            if ($appHost && request()->getHost() !== $appHost) {
+                // If they access via wrong host, cleanly redirect them before parsing the template
+                header("HTTP/1.1 301 Moved Permanently");
+                header("Location: " . config('app.url') . request()->getRequestUri());
+                exit();
+            }
+        }
     }
 }
