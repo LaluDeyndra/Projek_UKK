@@ -1,4 +1,11 @@
 User-agent: *
-Disallow:
+Allow: /
 
+# Hindari bot merayap ke direktori framework/internal
+Disallow: /vendor/
+Disallow: /storage/
+Disallow: /api/
+Disallow: /admin/
+
+# Lokasi sitemap untuk mempermudah Google Console Test
 Sitemap: https://www.arvi.life/sitemap.xml

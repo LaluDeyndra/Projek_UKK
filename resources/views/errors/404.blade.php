@@ -1,217 +1,149 @@
 <x-public-layout>
-    <x-slot:title>404 - Halaman Tidak Ditemukan</x-slot:title>
+    <x-slot:title>404 - Arctic Vision</x-slot:title>
 
-    <x-slot:styles>
-        <style>
-            .error-container {
-                min-height: calc(100vh - 80px); /* Adjust based on navbar height */
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 2rem;
-                text-align: center;
-                position: relative;
-                overflow: hidden;
-                background: linear-gradient(to bottom, var(--av-surface-2) 0%, var(--av-bg) 100%);
-            }
-
-            .error-container::before {
-                content: '';
-                position: absolute;
-                inset: 0;
-                background: radial-gradient(circle at center, color-mix(in srgb, var(--av-primary) 10%, transparent) 0%, transparent 60%);
-                pointer-events: none;
-            }
-
-            .error-code {
-                font-size: 8rem;
-                font-weight: 900;
-                line-height: 1;
-                background: linear-gradient(135deg, var(--av-primary) 0%, #38bdf8 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                margin-bottom: 1rem;
-                text-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-                animation: float-404 6s ease-in-out infinite;
-                position: relative;
-            }
-
-            @media (min-width: 768px) {
-                .error-code {
-                    font-size: 14rem;
-                }
-            }
-
-            @keyframes float-404 {
-                0%, 100% { transform: translateY(0); }
-                50% { transform: translateY(-20px); }
-            }
-
-            .error-title {
-                font-size: 2rem;
-                font-weight: 700;
-                color: var(--av-text);
-                margin-bottom: 1rem;
-            }
-
-            @media (min-width: 768px) {
-                .error-title {
-                    font-size: 2.5rem;
-                }
-            }
-
-            .error-desc {
-                font-size: 1.125rem;
-                color: var(--av-muted);
-                max-width: 32rem;
-                margin: 0 auto 2.5rem;
-                line-height: 1.7;
-            }
-
-            .error-icon {
-                font-size: 4rem;
-                color: var(--av-primary);
-                margin-bottom: 1rem;
-                opacity: 0.8;
-                animation: spin-slow 15s linear infinite;
-            }
-
-            @keyframes spin-slow {
-                100% { transform: rotate(360deg); }
-            }
-
-            .home-btn {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 0.75rem;
-                padding: 1rem 2.5rem;
-                background: var(--av-primary);
-                color: white;
-                border-radius: 9999px;
-                font-weight: 600;
-                font-size: 1.125rem;
-                text-decoration: none;
-                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s, box-shadow 0.3s;
-                box-shadow: 0 4px 14px 0 color-mix(in srgb, var(--av-primary) 40%, transparent);
-            }
-
-            .home-btn:hover {
-                transform: translateY(-3px) scale(1.02);
-                background: var(--av-primary-2);
-                box-shadow: 0 8px 25px 0 color-mix(in srgb, var(--av-primary) 50%, transparent);
-            }
-
-            /* Snowflakes that fall in the background */
-            .err-snowflake {
-                position: absolute;
-                top: -30px;
-                color: color-mix(in srgb, var(--av-text) 20%, transparent);
-                animation: fall linear forwards;
-                pointer-events: none;
-                z-index: 1;
-            }
-            
-            @keyframes fall {
-                to {
-                    transform: translateY(120vh) rotate(360deg);
-                }
-            }
-
-            .content-wrapper {
-                position: relative;
-                z-index: 10;
-                background: color-mix(in srgb, var(--av-surface) 60%, transparent);
-                backdrop-filter: blur(16px);
-                -webkit-backdrop-filter: blur(16px);
-                border: 1px solid color-mix(in srgb, var(--av-border) 80%, transparent);
-                border-radius: 2rem;
-                padding: 4rem 2rem;
-                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
-                max-width: 800px;
-                width: 100%;
-                margin: 0 auto;
-            }
-        </style>
-    </x-slot:styles>
-
-    <div class="error-container" id="errorContainer">
-        <div class="content-wrapper">
-            <div class="error-icon">
-                <i class="fas fa-snowflake"></i>
-            </div>
-            
-            <div class="error-code">404</div>
-            
-            <h2 class="error-title">
-                <span class="lang-id">Tersesat di Badai Salju?</span>
-                <span class="lang-en">Lost in the Blizzard?</span>
-            </h2>
-            
-            <p class="error-desc">
-                <span class="lang-id">Halaman atau satwa yang Anda cari tampaknya telah tertimbun tebalnya salju dan tidak ditemukan di dalam koordinat ekosistem Arktik kami.</span>
-                <span class="lang-en">The page or animal you are looking for seems to have been buried by thick snow and cannot be found within our Arctic ecosystem coordinates.</span>
-            </p>
-            
-            <a href="{{ route('welcome') }}" class="home-btn">
-                <i class="fas fa-campground"></i>
-                <span style="display: inline-block;">
-                    <span class="lang-id">Kembali ke Basecamp</span>
-                    <span class="lang-en">Return to Basecamp</span>
-                </span>
-            </a>
+    <div class="min-h-screen pt-28 pb-12 relative flex items-center justify-center overflow-hidden" style="background: var(--av-surface-2);">
+        
+        <!-- Animated Background Blobs -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+            <div class="absolute top-[15%] left-[15%] w-[40%] h-[40%] rounded-full opacity-20 blur-[100px] animate-pulse" style="background: var(--av-primary); animation-duration: 8s;"></div>
+            <div class="absolute bottom-[10%] right-[15%] w-[40%] h-[40%] rounded-full opacity-20 blur-[100px] animate-pulse" style="background: var(--av-primary-2); animation-duration: 12s;"></div>
         </div>
+
+        <!-- Huge Watermark 404 -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] md:text-[25rem] lg:text-[35rem] font-black pointer-events-none select-none z-0 tracking-tighter" style="color: color-mix(in srgb, var(--av-text) 3%, transparent); filter: blur(2px);">
+            404
+        </div>
+
+        <!-- Main Content Glass Card -->
+        <div class="relative z-10 w-full max-w-2xl mx-auto px-4 sm:px-6">
+            <div class="p-8 md:p-12 rounded-[2.5rem] text-center transition-all duration-500 hover:shadow-2xl" 
+                 style="background: color-mix(in srgb, var(--av-surface) 60%, transparent); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid color-mix(in srgb, var(--av-border) 60%, transparent); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);">
+                
+                <!-- Animated Icon / Radar -->
+                <div class="relative inline-flex items-center justify-center w-24 h-24 mb-6">
+                    <!-- Ping Animation Background -->
+                    <div class="absolute inset-0 rounded-full animate-ping opacity-20" style="background: var(--av-primary); animation-duration: 2s;"></div>
+                    
+                    <!-- Spinning Dashed Border -->
+                    <div class="absolute inset-[-12px] rounded-full border-2 border-dashed animate-[spin_8s_linear_infinite]" style="border-color: var(--av-primary); opacity: 0.4;"></div>
+                    
+                    <!-- Center Solid Icon Background -->
+                    <div class="relative flex items-center justify-center w-full h-full rounded-full shadow-[0_0_30px_rgba(37,99,235,0.3)]" style="background: linear-gradient(135deg, var(--av-primary), var(--av-primary-2));">
+                        <i class="fas fa-satellite-dish text-4xl text-white"></i>
+                    </div>
+                </div>
+
+                <!-- Error Title & Gradient Text -->
+                <h1 class="text-4xl sm:text-5xl font-extrabold mb-3 tracking-tight" style="color: var(--av-text);">
+                    <span class="bg-clip-text text-transparent" style="background-image: linear-gradient(135deg, var(--av-primary), #818cf8);">Error 404</span>
+                </h1>
+                
+                <h2 class="text-2xl sm:text-3xl font-bold mb-4" style="color: var(--av-text);">
+                    <span class="lang-id">Sinyal Hilang di Badai Salju</span>
+                    <span class="lang-en">Signal Lost in the Blizzard</span>
+                </h2>
+                
+                <!-- Separator Line -->
+                <div class="w-16 h-1 mx-auto rounded-full mb-6" style="background: color-mix(in srgb, var(--av-primary) 50%, transparent);"></div>
+                
+                <p class="text-lg md:text-xl mb-10 opacity-70 max-w-md mx-auto leading-relaxed" style="color: var(--av-text);">
+                    <span class="lang-id">Halaman atau koordinat sensor yang Anda cari tidak dapat dilacak. Kemungkinan besar telah tertimbun oleh tebalnya salju Arktik.</span>
+                    <span class="lang-en">The page or sensor coordinates you are looking for cannot be tracked. Most likely buried by the thick Arctic snow.</span>
+                </p>
+                
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button onclick="window.history.back()" class="w-full sm:w-auto px-8 py-3.5 rounded-2xl font-semibold transition-all duration-300 hover:-translate-y-1 hover:shadow-lg flex items-center justify-center gap-2 group" style="background: var(--av-surface-2); border: 1px solid var(--av-border); color: var(--av-text);">
+                        <i class="fas fa-arrow-left text-sm transition-transform group-hover:-translate-x-1 opacity-70"></i>
+                        <span class="lang-id">Kembali</span>
+                        <span class="lang-en">Go Back</span>
+                    </button>
+                    
+                    <a href="{{ route('welcome') }}" class="w-full sm:w-auto px-8 py-3.5 rounded-2xl font-semibold transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_25px_rgba(37,99,235,0.4)] flex items-center justify-center gap-2 text-white group" style="background: linear-gradient(135deg, var(--av-primary), var(--av-primary-2));">
+                        <i class="fas fa-campground text-sm transition-transform group-hover:scale-110"></i>
+                        <span class="lang-id">Ke Basecamp</span>
+                        <span class="lang-en">To Basecamp</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Falling Snowflakes Container -->
+        <div id="snow-container" class="absolute inset-0 pointer-events-none z-20 overflow-hidden"></div>
     </div>
 
-    <!-- Script to generate random falling snowflakes exclusively in 404 block -->
+    <!-- Script for Dynamic & Interactive Snowflakes -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const container = document.getElementById('errorContainer');
+            const container = document.getElementById('snow-container');
             if (!container) return;
             
-            const snowflakeCount = window.innerWidth > 768 ? 40 : 20;
-            
-            for (let i = 0; i < snowflakeCount; i++) {
-                createSnowflake(container);
-            }
-            
-            // Periodically add more to keep the blizzard going
-            setInterval(() => {
-                if (document.hidden) return; // Don't animate when tab is hidden
-                createSnowflake(container);
-            }, 1000);
-            
-            function createSnowflake(parent) {
-                const sf = document.createElement('i');
-                const types = ['fa-snowflake', 'fa-asterisk', 'fa-circle'];
+            // Limit particles based on device to prevent lag
+            const isMobile = window.innerWidth < 768;
+            const maxFlakes = isMobile ? 30 : 60;
+            let currentFlakes = 0;
+
+            function createParticle() {
+                if (currentFlakes >= maxFlakes || document.hidden) return;
                 
-                sf.className = 'fas ' + types[Math.floor(Math.random() * types.length)] + ' err-snowflake';
-                sf.style.left = Math.random() * 100 + '%';
+                const flake = document.createElement('div');
+                const size = Math.random() * 6 + 3; // 3px to 9px
+                const duration = Math.random() * 6 + 6; // 6s to 12s
+                const startLeft = Math.random() * 105 - 2.5; // -2.5% to 102.5%
+                const wind = (Math.random() - 0.5) * 40; // Horizontal sway
+                const isSnowflakeIcon = Math.random() > 0.7; // 30% are actual SVG/icons, 70% are circles
                 
-                // Randomize sizes and speeds
-                const duration = Math.random() * 8 + 5; 
-                sf.style.animationDuration = duration + 's';
+                flake.className = 'absolute pointer-events-none flex items-center justify-center';
+                flake.style.left = startLeft + '%';
+                flake.style.top = '-20px';
+                flake.style.transition = `top ${duration}s linear, left ${duration}s linear, transform ${duration}s linear, opacity ${duration}s ease-in-out`;
+                flake.style.opacity = '0';
                 
-                // Random delay so they don't all fall together initially
-                sf.style.animationDelay = (Math.random() * 5) + 's';
-                
-                // Opacity based on Z-depth illusion
-                const depth = Math.random();
-                sf.style.opacity = Math.max(0.1, depth * 0.4);
-                sf.style.fontSize = (depth * 20 + 8) + 'px';
-                
-                // Light blur for distant flakes
-                if (depth < 0.3) {
-                    sf.style.filter = 'blur(1px)';
+                if (isSnowflakeIcon) {
+                    flake.innerHTML = '<i class="fas fa-snowflake"></i>';
+                    flake.style.color = 'color-mix(in srgb, var(--av-text) ' + (Math.random() * 20 + 10) + '%, transparent)';
+                    flake.style.fontSize = size * 1.5 + 'px';
+                } else {
+                    flake.style.width = size + 'px';
+                    flake.style.height = size + 'px';
+                    flake.style.borderRadius = '50%';
+                    flake.style.background = 'color-mix(in srgb, var(--av-text) ' + (Math.random() * 30 + 10) + '%, transparent)';
+                    if (size > 6) flake.style.filter = 'blur(1px)';
                 }
                 
-                parent.appendChild(sf);
+                // Add to DOM
+                container.appendChild(flake);
+                currentFlakes++;
                 
-                // Clean up DOM after animation completes
+                // Trigger animation next frame
+                requestAnimationFrame(() => {
+                    const targetOpacity = Math.random() * 0.6 + 0.2;
+                    flake.style.opacity = targetOpacity.toString();
+                    flake.style.top = '110%'; // Always fall perfectly below the container
+                    flake.style.left = `calc(${startLeft}% + ${wind}vw)`;
+                    flake.style.transform = `rotate(${Math.random() * 720}deg)`;
+                    
+                    // Fade out near the end
+                    setTimeout(() => {
+                        if(flake) flake.style.opacity = '0';
+                    }, (duration - 1) * 1000);
+                });
+                
+                // Remove when done
                 setTimeout(() => {
-                    if (sf.parentNode) sf.parentNode.removeChild(sf);
-                }, (duration + 5) * 1000);
+                    if (flake.parentNode) flake.parentNode.removeChild(flake);
+                    currentFlakes--;
+                }, duration * 1000);
             }
+
+            // Initial burst of snow
+            let burstCount = isMobile ? 15 : 30;
+            for(let i=0; i<burstCount; i++) {
+                setTimeout(createParticle, Math.random() * 3000);
+            }
+
+            // Continuous spawn
+            setInterval(createParticle, 250);
         });
     </script>
 </x-public-layout>
