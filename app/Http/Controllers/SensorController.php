@@ -43,7 +43,7 @@ class SensorController extends Controller
         ];
 
         // 1. LAPISAN RAM: Selalu simpan ke Cache untuk status Real-Time instan (Tahan 60 Menit)
-        Cache::put('sensor_latest', $cacheData, $now->addMinutes(60));
+        Cache::put('sensor_latest', $cacheData, $now->copy()->addMinutes(60));
 
         // 2. LAPISAN STORAGE: Cek Interval 30 Menit untuk Database Historis
         // Menggunakan sistem Cache Lock / Cooldown agar bebas dari bug Timezone antara PHP dan MySQL

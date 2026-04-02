@@ -44,10 +44,20 @@ void kirimData() {
   Serial.print(kelembapan);
   Serial.println(" %");
 
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("✗ WiFi terputus, mengabaikan pengiriman data sementara...");
+    return;
+  }
+
   // ===== KIRIM KE BLYNK =====
-  Blynk.virtualWrite(V0, suhu);        // V0 = suhu
-  Blynk.virtualWrite(V1, kelembapan);  // V1 = kelembapan
-  Serial.println("✓ Data sent to Blynk");
+  if (Blynk.connected()) {
+    Blynk.virtualWrite(V0, suhu);        // V0 = suhu
+    Blynk.virtualWrite(V1, kelembapan);  // V1 = kelembapan
+    Serial.println("✓ Data sent to Blynk");
+  } else {
+    Serial.println("✗ Blynk tidak terhubung, mencoba menyambung ulang...");
+    Blynk.connect(); // Coba sambung ulang ke server Blynk
+  }
 
   // ===== KIRIM KE LARAVEL (DENGAN API KEY) =====
   kirimKeLaravel(suhu, kelembapan);
@@ -114,8 +124,14 @@ void setup() {
   Serial.println("\n\n=== Arctic Vision + Blynk (SECURE) ===");
   Serial.println("Initializing...");
 
-  // Koneksi WiFi dan Blynk
-  Blynk.begin(auth, ssid, pass);
+  // ===== MANUAL WIFI CONNECTION (ANTI-HANG) =====
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, pass);
+  WiFi.setAutoReconnect(true); // Agar otomatis reconnect jika putus
+  
+  // Konfigurasi Blynk tanpa Blocking (agar tidak stuck saat WiFi mati)
+  Blynk.config(auth);
+
   dht.begin();
   
   // Mengabaikan pengecekan SSL Certificate karena HTTPS biasa (Ngrok/Cloudflare) menggunakan sertifikat dinamis
@@ -128,6 +144,10 @@ void setup() {
 }
 
 void loop() {
-  Blynk.run();
+  // Hanya jalankan Blynk jika WiFi terhubung
+  if (WiFi.status() == WL_CONNECTED) {
+    Blynk.run();
+  }
+  
   timer.run();
 }

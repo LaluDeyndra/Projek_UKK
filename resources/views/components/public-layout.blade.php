@@ -441,6 +441,8 @@
             }, 500);
         });
     </script>
+
+    @include('components.ai-assistant')
 </body>
 
 </html>
