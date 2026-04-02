@@ -66,11 +66,15 @@ Tugasmu:
             if ($response->successful()) {
                 $data = $response->json();
                 $candidate = $data['candidates'][0] ?? null;
-                $reply = $candidate['content']['parts'][0]['text'] ?? "Maaf, panduannya sedang tidak bisa memahami permintaanmu.";
+                $reply = $candidate['content']['parts'][0]['text'] ?? ($langCode === 'en' 
+                    ? "Sorry, the guide cannot understand your request at the moment." 
+                    : "Maaf, panduannya sedang tidak bisa memahami permintaanmu.");
                 
                 // Cek apakah pesan kepanjangan secara sistem
                 if (isset($candidate['finishReason']) && $candidate['finishReason'] === 'MAX_TOKENS') {
-                    $reply .= "\n\n*[ ⚠️ Teks terputus: Anda telah mencapai batas maksimal kata per sekali kirim. Cobalah untuk bertanya lebih spesifik. ]*";
+                    $reply .= $langCode === 'en'
+                        ? "\n\n*[ ⚠️ Text truncated: You have reached the maximum character limit per message. Try asking more specifically. ]*"
+                        : "\n\n*[ ⚠️ Teks terputus: Anda telah mencapai batas maksimal kata per sekali respon. Cobalah untuk bertanya lebih spesifik. ]*";
                 }
 
                 // Hapus markdown heding dan bold berlebih
@@ -85,20 +89,26 @@ Tugasmu:
             // Kalau gagal karena limit Quota API (Terlalu banyak request atau habis)
             if ($status === 429) {
                 return response()->json([
-                    'reply' => 'Waduh! Kuota kecerdasan AI harian kami hari ini telah habis dipakai oleh banyak orang. Tolong kunjungi kembali besok ya!'
+                    'reply' => $langCode === 'en'
+                        ? "Oops! Our daily AI intelligence quota has been exhausted by too many explorers today. Please come back tomorrow!"
+                        : "Waduh! Kuota kecerdasan AI harian kami hari ini telah habis dipakai oleh banyak orang. Tolong kunjungi kembali besok ya!"
                 ], 429);
             }
 
             // Kalau gagal karena error mesin dari Google selain Limit
             $errorInfo = $response->json();
             return response()->json([
-                'reply' => 'Google API Error: ' . ($errorInfo['error']['message'] ?? 'Tidak diketahui')
+                'reply' => $langCode === 'en'
+                    ? 'Google API Error: ' . ($errorInfo['error']['message'] ?? 'Unknown error')
+                    : 'Google API Error: ' . ($errorInfo['error']['message'] ?? 'Tidak diketahui')
             ], $status);
 
         } catch (\Exception $e) {
             // Kalau gagal karena koneksi (misal cURL error 60)
             return response()->json([
-                'reply' => 'Koneksi dari komputer ke Google gagal: ' . $e->getMessage()
+                'reply' => $langCode === 'en'
+                    ? "Sorry, failed to connect to the server. Please ensure your internet connection is stable."
+                    : "Maaf, gagal menghubungi server (Pastikan koneksi internet stabil)."
             ], 500);
         }
     }
