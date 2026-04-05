@@ -622,6 +622,25 @@
         font-size: 1rem;
     }
 
+    .search-clear {
+        background: transparent;
+        border: none;
+        color: var(--av-muted);
+        font-size: 1.1rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.2s, transform 0.2s;
+        margin-right: 0.5rem;
+    }
+
+    .search-clear:hover {
+        color: var(--av-text);
+        transform: scale(1.1);
+    }
+
     .search-close {
         flex-shrink: 0;
         /* Prevent the close button from disappearing */
@@ -753,6 +772,7 @@
             <i class="fas fa-search search-icon"></i>
             <input type="text" id="searchInput" placeholder="Search across Arctic Vision... (Press '/')"
                 autocomplete="off">
+            <button class="search-clear" id="searchClearBtn" onclick="clearSearch()" aria-label="Clear search"><i class="fas fa-times-circle"></i></button>
             <button class="search-close" onclick="closeSearchModal()"><i class="fas fa-times"></i></button>
         </div>
         <div class="search-results" id="searchResults">
@@ -1196,11 +1216,18 @@
     function openSearchModal() {
         const modal = document.getElementById('searchModal');
         const input = document.getElementById('searchInput');
+        const clearBtn = document.getElementById('searchClearBtn');
         modal.style.display = 'flex';
         // Force reflow
         void modal.offsetWidth;
         modal.classList.add('show');
+        
         input.value = '';
+        if(clearBtn) clearBtn.style.display = 'none';
+        
+        currentSearchResults = [...searchDataList];
+        searchSelectedIndex = 0;
+        
         document.body.style.overflow = 'hidden'; // Prevent background scroll
         setTimeout(() => input.focus(), 100);
         renderSearchResults();
@@ -1263,10 +1290,13 @@
     document.getElementById('searchInput')?.addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase();
         const currentLang = localStorage.getItem('lang') || 'id';
+        const clearBtn = document.getElementById('searchClearBtn');
 
         if (!query.trim()) {
             currentSearchResults = [...searchDataList];
+            if(clearBtn) clearBtn.style.display = 'none';
         } else {
+            if(clearBtn) clearBtn.style.display = 'flex';
             currentSearchResults = searchDataList.filter(item => {
                 const keywordStr = item.keys ? item.keys.join(" ") : "";
                 const searchStr = (item.title[currentLang] + " " + item.desc[currentLang] + " " + keywordStr).toLowerCase();
@@ -1277,6 +1307,17 @@
         searchSelectedIndex = 0;
         renderSearchResults();
     });
+
+    function clearSearch() {
+        const input = document.getElementById('searchInput');
+        const clearBtn = document.getElementById('searchClearBtn');
+        input.value = '';
+        input.focus();
+        if(clearBtn) clearBtn.style.display = 'none';
+        currentSearchResults = [...searchDataList];
+        searchSelectedIndex = 0;
+        renderSearchResults();
+    }
 
     // Global Keydown Listeners for UI
     window.addEventListener('keydown', (e) => {

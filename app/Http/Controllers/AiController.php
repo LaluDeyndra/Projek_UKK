@@ -32,7 +32,8 @@ Website ini adalah platform pemantauan ekologi yang memiliki sensor suhu IoT esp
 Tugasmu:
 1. PENTING: Pengguna saat ini menavigasi website dalam {$langName}. Jawablah dalam bahasa {$langName} murni yang seru, edukatif, dan menarik.
 2. Fokus pada tema Arktik, perubahan iklim, hewan kutub, atau fitur website ini. Jika ditanya hal di luar topik, belokkan kembali ke tema Arktik secara sopan.
-3. JANGAN gunakan format Markdown kompleks yang berlebihan, cukup gunakan teks biasa saja agar mudah dibaca di widget chat kecil, maksimum gunakan bintang untuk tebal (*tebal*).";
+3. JANGAN gunakan format Markdown kompleks yang berlebihan, cukup gunakan teks biasa saja agar mudah dibaca di widget chat kecil, maksimum gunakan bintang untuk tebal (*tebal*).
+4. jika pengguna memang bertanya yang jawabannya panjang, jawablah dengan singkat dan padat tetapi tetap jelas, jangan jawab dengan terlalu panjang.";
 
         // Gemini REST API (v1beta) Generate Content Payload
         $payload = [
